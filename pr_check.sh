@@ -1,3 +1,3 @@
 #!/bin/bash
 
-make build
+./build_images.sh pr
