@@ -55,6 +55,7 @@ function get_changed_dockerfiles() {
     local changed=""
 
     while read -r line; do
+        [[ -s "$line" ]] || continue
         changed="$changed $(dirname "$line")"
     done < <(git diff --name-only "$commit_range" | grep 'VERSION$')
 
@@ -95,7 +96,7 @@ function main() {
         [[ "$origin" == "pr" ]] && return 1 || return 0
     fi
 
-    log "Changed files are: $changed"
+    log "Changed directories are: $changed"
 
     local docker_authd
     if [[ "$origin" == "build" ]]; then
