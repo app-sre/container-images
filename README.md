@@ -1,4 +1,4 @@
-# qontract-base
+# base-images
 
 Base images for app-sre projects
 
