@@ -99,6 +99,7 @@ function main() {
 
     local docker_authd
     if [[ "$origin" == "build" ]]; then
+        log "Login in $DOCKER_REGISTRY"
         docker_authd=$(get_authenticated_docker_command) || return 1
     fi
 
@@ -139,5 +140,5 @@ function main() {
 
 # Main
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-  main "$@" || exit 1
+  main "$@"
 fi
