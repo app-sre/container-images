@@ -45,6 +45,7 @@ ENV TF_VERSION=0.13.5
 ENV GIT_SECRETS_VERSION=1.3.0
 ENV JSONNET_VENDOR_DIR=/opt/jsonnet-bundler/vendor
 ENV PROMETHEUS_VERSION=2.23.0
+ENV ALERTMANAGER_VERSION=0.21.0
 ENV TF_PLUGIN_CACHE_DIR=/.terraform.d/plugin-cache
 
 RUN dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
@@ -70,6 +71,8 @@ RUN curl https://github.com/awslabs/git-secrets/archive/${GIT_SECRETS_VERSION}.t
     rm -rf git-secrets*
 
 RUN curl -sfL https://github.com/prometheus/prometheus/releases/download/v${PROMETHEUS_VERSION}/prometheus-${PROMETHEUS_VERSION}.linux-amd64.tar.gz | tar -zxf - -C /usr/local/bin --strip-components=1 prometheus-${PROMETHEUS_VERSION}.linux-amd64/promtool
+
+RUN curl -sfL https://github.com/prometheus/alertmanager/releases/download/v${ALERTMANAGER_VERSION}/alertmanager-${ALERTMANAGER_VERSION}.linux-amd64.tar.gz | tar -zxf - -C /usr/local/bin --strip-components=1 alertmanager-${ALERTMANAGER_VERSION}.linux-amd64/amtool
 
 COPY --from=jsonnet-builder /jsonnet/jsonnet /usr/local/bin/jsonnet
 COPY --from=jsonnet-builder /jsonnet-bundler/vendor ${JSONNET_VENDOR_DIR}
