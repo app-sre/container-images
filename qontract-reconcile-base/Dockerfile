@@ -56,9 +56,10 @@ RUN dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.n
 
 ENV OC_VERSIONS="4.5 4.6 4.7"
 COPY get_oc_binaries.sh /tmp
-RUN pushd /tmp && \
+RUN cd /tmp && \
     chmod +x get_oc_binaries.sh && \
-    ./get_oc_binaries.sh $OC_VERSIONS
+    ./get_oc_binaries.sh $OC_VERSIONS && \
+    /bin/rm get_oc_binaries.sh
 
 RUN curl https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip --output terraform.zip && \
     unzip terraform.zip && \
