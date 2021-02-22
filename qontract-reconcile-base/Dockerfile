@@ -40,7 +40,6 @@ FROM registry.access.redhat.com/ubi8/ubi:8.2
 
 ENV LC_ALL=en_US.utf8
 ENV LANG=en_US.utf8
-ENV OC_VERSION=4.6.1
 ENV TF_VERSION=0.13.5
 ENV GIT_SECRETS_VERSION=1.3.0
 ENV JSONNET_VENDOR_DIR=/opt/jsonnet-bundler/vendor
@@ -55,10 +54,11 @@ RUN dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.n
     python3 -m pip install --upgrade pip setuptools && \
     dnf clean all
 
-RUN curl https://mirror.openshift.com/pub/openshift-v4/clients/ocp/${OC_VERSION}/openshift-client-linux.tar.gz -o oc.tar.gz &&\
-    tar -zvxf oc.tar.gz && \
-    mv oc kubectl /usr/local/bin && \
-    rm oc.tar.gz
+ENV OC_VERSIONS="4.5 4.6 4.7"
+COPY get_oc_binaries.sh /tmp
+RUN pushd /tmp && \
+    chmod +x get_oc_binaries.sh && \
+    ./get_oc_binaries.sh $OC_VERSIONS
 
 RUN curl https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip --output terraform.zip && \
     unzip terraform.zip && \
