@@ -48,6 +48,6 @@ RUN curl -sfL https://github.com/prometheus/prometheus/releases/download/v${PROM
 RUN curl -sfL https://github.com/prometheus/alertmanager/releases/download/v${ALERTMANAGER_VERSION}/alertmanager-${ALERTMANAGER_VERSION}.linux-amd64.tar.gz | tar -zxf - -C /usr/local/bin --strip-components=1 alertmanager-${ALERTMANAGER_VERSION}.linux-amd64/amtool
 
 RUN mkdir -p ${TF_PLUGIN_CACHE_DIR}
-COPY --from=terraform-providers-downloader /tmp/terraform-providers/ /.terraform.d/plugins/registry.terraform.io/hashicorp/aws/
-RUN find /.terraform.d/ -type d -exec chmod 0755 {} \;
+COPY --from=terraform-providers-downloader /tmp/terraform-providers/ /root/.terraform.d/plugins/registry.terraform.io/hashicorp/aws/
+RUN find /root/.terraform.d/ -type d -exec chmod 0755 {} \;
 RUN chmod 0775 ${TF_PLUGIN_CACHE_DIR}
