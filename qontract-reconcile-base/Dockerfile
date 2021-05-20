@@ -20,7 +20,7 @@ ENV GIT_SECRETS_VERSION=1.3.0
 ENV PROMETHEUS_VERSION=2.26.0
 ENV ALERTMANAGER_VERSION=0.21.0
 ENV TF_PLUGIN_LOCAL_DIR=/usr/local/share/terraform
-ENV TF_PLUGIN_CACHE_DIR=/.terraform.d
+ENV TF_PLUGIN_CACHE_DIR=/.terraform.d/plugin-cache
 
 RUN dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
     curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/CentOS_8/devel:kubic:libcontainers:stable.repo && \
@@ -48,7 +48,6 @@ RUN curl -sfL https://github.com/prometheus/prometheus/releases/download/v${PROM
 
 RUN curl -sfL https://github.com/prometheus/alertmanager/releases/download/v${ALERTMANAGER_VERSION}/alertmanager-${ALERTMANAGER_VERSION}.linux-amd64.tar.gz | tar -zxf - -C /usr/local/bin --strip-components=1 alertmanager-${ALERTMANAGER_VERSION}.linux-amd64/amtool
 
-RUN mkdir -p ${TF_PLUGIN_CACHE_DIR}/plugin-cache
+RUN mkdir -p ${TF_PLUGIN_CACHE_DIR}
 COPY --from=terraform-providers-downloader /tmp/terraform-providers/ ${TF_PLUGIN_LOCAL_DIR}/plugins/registry.terraform.io/hashicorp/aws/
-RUN find ${TF_PLUGIN_LOCAL_DIR} -type d -exec chmod 0755 {} \;
-RUN find ${TF_PLUGIN_CACHE_DIR} -type d -exec chmod 0775 {} \;
+RUN find /.terraform.d/ -type d -exec chmod 0775 {} \;
