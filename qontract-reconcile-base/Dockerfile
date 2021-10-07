@@ -1,13 +1,21 @@
 FROM registry.access.redhat.com/ubi8/ubi:8.2 AS terraform-providers-downloader
 
-ENV VERSIONS="3.22.0 3.30.0"
+ENV TF_PROVIDER_AWS_TF_PROVIDER_AWS_VERSIONS="3.22.0 3.30.0"
+ENV TF_PROVIDER_TIME_VERSIONS="0.7.2"
 
 RUN dnf -y install unzip; \
-    cd /tmp/; rm -rf /tmp/terraform-* ; rm -rf /tmp/package-* ;\
-    for version in ${VERSIONS}; do \
-    mkdir -p /tmp/terraform-providers/${version}/linux_amd64 ;\
-    curl -o /tmp/package-${version}.zip https://releases.hashicorp.com/terraform-provider-aws/${version}/terraform-provider-aws_${version}_linux_amd64.zip; \
-    unzip /tmp/package-${version}.zip -d /tmp/terraform-providers/${version}/linux_amd64/; \
+    cd /tmp/; rm -rf /tmp/terraform-* ; rm -rf /tmp/package-*
+
+RUN for version in ${TF_PROVIDER_AWS_VERSIONS}; do \
+    mkdir -p /tmp/terraform-providers/aws/${version}/linux_amd64 ;\
+    curl -o /tmp/package-aws-${version}.zip https://releases.hashicorp.com/terraform-provider-aws/${version}/terraform-provider-aws_${version}_linux_amd64.zip; \
+    unzip /tmp/package-aws-${version}.zip -d /tmp/terraform-providers/aws/${version}/linux_amd64/; \
+    done
+
+RUN for version in ${TF_PROVIDER_TIME_VERSIONS}; do \
+    mkdir -p /tmp/terraform-providers/time/${version}/linux_amd64 ;\
+    curl -o /tmp/package-time-${version}.zip https://releases.hashicorp.com/terraform-provider-time/${version}/terraform-provider-time_${version}_linux_amd64.zip; \
+    unzip /tmp/package-time-${version}.zip -d /tmp/terraform-providers/time/${version}/linux_amd64/; \
     done
 
 FROM registry.access.redhat.com/ubi8/ubi:8.2
@@ -49,5 +57,6 @@ RUN curl -sfL https://github.com/prometheus/prometheus/releases/download/v${PROM
 RUN curl -sfL https://github.com/prometheus/alertmanager/releases/download/v${ALERTMANAGER_VERSION}/alertmanager-${ALERTMANAGER_VERSION}.linux-amd64.tar.gz | tar -zxf - -C /usr/local/bin --strip-components=1 alertmanager-${ALERTMANAGER_VERSION}.linux-amd64/amtool
 
 RUN mkdir -p ${TF_PLUGIN_CACHE_DIR}
-COPY --from=terraform-providers-downloader /tmp/terraform-providers/ ${TF_PLUGIN_LOCAL_DIR}/plugins/registry.terraform.io/hashicorp/aws/
+COPY --from=terraform-providers-downloader /tmp/terraform-providers/aws ${TF_PLUGIN_LOCAL_DIR}/plugins/registry.terraform.io/hashicorp/aws/
+COPY --from=terraform-providers-downloader /tmp/terraform-providers/time ${TF_PLUGIN_LOCAL_DIR}/plugins/registry.terraform.io/hashicorp/time/
 RUN find /.terraform.d/ -type d -exec chmod 0775 {} \;
