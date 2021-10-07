@@ -1,6 +1,6 @@
 FROM registry.access.redhat.com/ubi8/ubi:8.2 AS terraform-providers-downloader
 
-ENV TF_PROVIDER_AWS_TF_PROVIDER_AWS_VERSIONS="3.22.0 3.30.0"
+ENV TF_PROVIDER_AWS_VERSIONS="3.22.0 3.30.0"
 ENV TF_PROVIDER_TIME_VERSIONS="0.7.2"
 
 RUN dnf -y install unzip; \
