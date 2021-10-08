@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/ubi:8.2 AS terraform-providers-downloader
+FROM registry.access.redhat.com/ubi8/ubi:8.4 AS terraform-providers-downloader
 
 ENV TF_PROVIDER_AWS_VERSIONS="3.22.0 3.30.0"
 ENV TF_PROVIDER_TIME_VERSIONS="0.7.2"
@@ -18,7 +18,7 @@ RUN for version in ${TF_PROVIDER_TIME_VERSIONS}; do \
     unzip /tmp/package-time-${version}.zip -d /tmp/terraform-providers/time/${version}/linux_amd64/; \
     done
 
-FROM registry.access.redhat.com/ubi8/ubi:8.2
+FROM registry.access.redhat.com/ubi8/ubi:8.4
 
 ENV LC_ALL=en_US.utf8
 ENV LANG=en_US.utf8
@@ -32,8 +32,9 @@ ENV TF_PLUGIN_CACHE_DIR=/.terraform.d/plugin-cache
 
 RUN dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
     curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/CentOS_8/devel:kubic:libcontainers:stable.repo && \
-    dnf install -y python3 python3-pip python3-devel git make tar gzip unzip gcc gcc-c++ openssh-clients openssl glibc-langpack-en && \
+    dnf install -y python39 gnupg2 python3-pip python3-devel git make tar gzip unzip gcc gcc-c++ openssh-clients openssl glibc-langpack-en && \
     dnf install -y skopeo && \
+    /usr/sbin/update-alternatives --set python3 /usr/bin/python3.9 && \
     python3 -m pip install --upgrade pip setuptools && \
     dnf clean all
 
