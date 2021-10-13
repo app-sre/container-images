@@ -32,7 +32,7 @@ ENV TF_PLUGIN_CACHE_DIR=/.terraform.d/plugin-cache
 
 RUN dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
     curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/CentOS_8/devel:kubic:libcontainers:stable.repo && \
-    dnf install -y python39 gnupg2 python3-pip python3-devel git make tar gzip unzip gcc gcc-c++ openssh-clients openssl glibc-langpack-en && \
+    dnf install -y python39 gnupg2 python3-pip python3{,9}-devel git make tar gzip unzip gcc gcc-c++ openssh-clients openssl glibc-langpack-en && \
     dnf install -y skopeo && \
     /usr/sbin/update-alternatives --set python3 /usr/bin/python3.9 && \
     python3 -m pip install --upgrade pip setuptools && \
