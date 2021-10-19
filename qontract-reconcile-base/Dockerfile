@@ -16,32 +16,37 @@ ENV ALERTMANAGER_VERSION=0.21.0
 
 RUN for version in ${TF_PROVIDER_AWS_VERSIONS}; do \
     mkdir -p /tmp/terraform-providers/aws/${version}/linux_amd64 ;\
-    curl -s -o /tmp/package-aws-${version}.zip https://releases.hashicorp.com/terraform-provider-aws/${version}/terraform-provider-aws_${version}_linux_amd64.zip; \
+    curl -sfL https://releases.hashicorp.com/terraform-provider-aws/${version}/terraform-provider-aws_${version}_linux_amd64.zip \
+    -o /tmp/package-aws-${version}.zip; \
     unzip /tmp/package-aws-${version}.zip -d /tmp/terraform-providers/aws/${version}/linux_amd64/; \
     done
 
 RUN for version in ${TF_PROVIDER_TIME_VERSIONS}; do \
     mkdir -p /tmp/terraform-providers/time/${version}/linux_amd64 ;\
-    curl -s -L -o /tmp/package-time-${version}.zip https://releases.hashicorp.com/terraform-provider-time/${version}/terraform-provider-time_${version}_linux_amd64.zip; \
+    curl -sfL https://releases.hashicorp.com/terraform-provider-time/${version}/terraform-provider-time_${version}_linux_amd64.zip \
+    -o /tmp/package-time-${version}.zip; \
     unzip /tmp/package-time-${version}.zip -d /tmp/terraform-providers/time/${version}/linux_amd64/; \
     done
 
 RUN dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
-    curl -s -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/CentOS_8/devel:kubic:libcontainers:stable.repo && \
-    dnf install -y tar gzip unzip && \
+    curl -sfL https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/CentOS_8/devel:kubic:libcontainers:stable.repo \
+    -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo && \
     dnf install -y skopeo
 
-RUN curl -s -L -o https://mirror.openshift.com/pub/openshift-v4/clients/ocp/${OC_VERSION}/openshift-client-linux.tar.gz -o oc.tar.gz &&\
+RUN curl -sfL https://mirror.openshift.com/pub/openshift-v4/clients/ocp/${OC_VERSION}/openshift-client-linux.tar.gz \
+    -o oc.tar.gz && \
     tar -zvxf oc.tar.gz && \
     mv oc kubectl /usr/local/bin && \
     rm oc.tar.gz
 
-RUN curl -s -L -o https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip --output terraform.zip && \
+RUN curl -sfL https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip \
+    -o terraform.zip && \
     unzip terraform.zip && \
     mv terraform /usr/local/bin/terraform && \
     rm terraform.zip
 
-RUN curl -s -L https://github.com/awslabs/git-secrets/archive/${GIT_SECRETS_VERSION}.tar.gz -L -o git-secrets.tar.gz && \
+RUN curl -sfL https://github.com/awslabs/git-secrets/archive/${GIT_SECRETS_VERSION}.tar.gz \
+    -o git-secrets.tar.gz && \
     tar -zvxf git-secrets.tar.gz git-secrets-${GIT_SECRETS_VERSION}/git-secrets && \
     mv git-secrets-${GIT_SECRETS_VERSION}/git-secrets /usr/local/bin/git-secrets && \
     rm -rf git-secrets*
