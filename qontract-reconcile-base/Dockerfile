@@ -1,10 +1,18 @@
-FROM registry.access.redhat.com/ubi8/ubi:8.4 AS terraform-providers-downloader
+FROM registry.access.redhat.com/ubi8/ubi:8.4 AS downloader
+
+ENV LC_ALL=en_US.utf8
+ENV LANG=en_US.utf8
 
 ENV TF_PROVIDER_AWS_VERSIONS="3.22.0 3.30.0"
 ENV TF_PROVIDER_TIME_VERSIONS="0.7.2"
+ENV OC_VERSION=4.8.11
+ENV TF_VERSION=0.13.7
+ENV GIT_SECRETS_VERSION=1.3.0
+ENV PROMETHEUS_VERSION=2.26.0
+ENV ALERTMANAGER_VERSION=0.21.0
 
-RUN dnf -y install unzip; \
-    cd /tmp/; rm -rf /tmp/terraform-* ; rm -rf /tmp/package-*
+
+RUN dnf -y install unzip;
 
 RUN for version in ${TF_PROVIDER_AWS_VERSIONS}; do \
     mkdir -p /tmp/terraform-providers/aws/${version}/linux_amd64 ;\
@@ -17,16 +25,6 @@ RUN for version in ${TF_PROVIDER_TIME_VERSIONS}; do \
     curl -o /tmp/package-time-${version}.zip https://releases.hashicorp.com/terraform-provider-time/${version}/terraform-provider-time_${version}_linux_amd64.zip; \
     unzip /tmp/package-time-${version}.zip -d /tmp/terraform-providers/time/${version}/linux_amd64/; \
     done
-
-FROM registry.access.redhat.com/ubi8/ubi:8.4 AS binaries-downloader
-
-ENV LC_ALL=en_US.utf8
-ENV LANG=en_US.utf8
-ENV OC_VERSION=4.8.11
-ENV TF_VERSION=0.13.7
-ENV GIT_SECRETS_VERSION=1.3.0
-ENV PROMETHEUS_VERSION=2.26.0
-ENV ALERTMANAGER_VERSION=0.21.0
 
 RUN dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
     curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/CentOS_8/devel:kubic:libcontainers:stable.repo && \
@@ -55,18 +53,18 @@ RUN curl -sfL https://github.com/prometheus/alertmanager/releases/download/v${AL
     | tar -zxf - -C /usr/local/bin --strip-components=1 alertmanager-${ALERTMANAGER_VERSION}.linux-amd64/amtool
 
 
-
 FROM registry.access.redhat.com/ubi8/ubi-minimal:8.4
 
 ENV TF_PLUGIN_LOCAL_DIR=/usr/local/share/terraform/
 ENV TF_PLUGIN_CACHE_DIR=/.terraform.d/plugin-cache/
 
-COPY --chown=0:0 --from=terraform-providers-downloader \
+# Terraform providers
+COPY --chown=0:0 --from=downloader \
     /tmp/terraform-providers/ \
     ${TF_PLUGIN_LOCAL_DIR}/plugins/registry.terraform.io/hashicorp/
 
 # Tooling binaries
-COPY --chown=0.0 --from=binaries-downloader \
+COPY --chown=0.0 --from=downloader \
     /usr/local/bin/kubectl \
     /usr/local/bin/oc \
     /usr/local/bin/terraform \
@@ -77,7 +75,7 @@ COPY --chown=0.0 --from=binaries-downloader \
     /usr/local/bin/
 
 RUN mkdir -p ${TF_PLUGIN_CACHE_DIR} && \
-    microdnf upgrade --assumeyes && \
+    microdnf upgrade -y && \
     microdnf install \
         git \
         glibc-langpack-en \
