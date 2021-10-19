@@ -12,7 +12,7 @@ ENV PROMETHEUS_VERSION=2.26.0
 ENV ALERTMANAGER_VERSION=0.21.0
 
 
-RUN dnf -y install unzip;
+RUN dnf -y install unzip glibc-langpack-en;
 
 RUN for version in ${TF_PROVIDER_AWS_VERSIONS}; do \
     mkdir -p /tmp/terraform-providers/aws/${version}/linux_amd64 ;\
@@ -64,7 +64,7 @@ COPY --chown=0:0 --from=downloader \
     ${TF_PLUGIN_LOCAL_DIR}/plugins/registry.terraform.io/hashicorp/
 
 # Tooling binaries
-COPY --chown=0.0 --from=downloader \
+COPY --chown=0:0 --from=downloader \
     /usr/local/bin/kubectl \
     /usr/local/bin/oc \
     /usr/local/bin/terraform \
