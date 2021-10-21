@@ -1,6 +1,6 @@
 FROM registry.access.redhat.com/ubi8/ubi:8.4 AS downloader
 
-RUN dnf -y install unzip glibc-langpack-en;
+RUN dnf -y install unzip glibc-langpack-en
 
 ENV LC_ALL=en_US.utf8
 ENV LANG=en_US.utf8
@@ -31,7 +31,8 @@ RUN for version in ${TF_PROVIDER_TIME_VERSIONS}; do \
 RUN dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
     curl -sfL https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/CentOS_8/devel:kubic:libcontainers:stable.repo \
     -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo && \
-    dnf install -y skopeo
+    dnf install -y skopeo && \
+    dnf clean all
 
 RUN curl -sfL https://mirror.openshift.com/pub/openshift-v4/clients/ocp/${OC_VERSION}/openshift-client-linux.tar.gz \
     -o oc.tar.gz && \
@@ -51,9 +52,11 @@ RUN curl -sfL https://github.com/awslabs/git-secrets/archive/${GIT_SECRETS_VERSI
     mv git-secrets-${GIT_SECRETS_VERSION}/git-secrets /usr/local/bin/git-secrets && \
     rm -rf git-secrets*
 
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN curl -sfL https://github.com/prometheus/prometheus/releases/download/v${PROMETHEUS_VERSION}/prometheus-${PROMETHEUS_VERSION}.linux-amd64.tar.gz \
     | tar -zxf - -C /usr/local/bin --strip-components=1 prometheus-${PROMETHEUS_VERSION}.linux-amd64/promtool
 
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN curl -sfL https://github.com/prometheus/alertmanager/releases/download/v${ALERTMANAGER_VERSION}/alertmanager-${ALERTMANAGER_VERSION}.linux-amd64.tar.gz \
     | tar -zxf - -C /usr/local/bin --strip-components=1 alertmanager-${ALERTMANAGER_VERSION}.linux-amd64/amtool
 
