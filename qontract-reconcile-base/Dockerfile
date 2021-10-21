@@ -50,6 +50,7 @@ RUN curl -sfL https://github.com/awslabs/git-secrets/archive/${GIT_SECRETS_VERSI
     -o git-secrets.tar.gz && \
     tar -zvxf git-secrets.tar.gz git-secrets-${GIT_SECRETS_VERSION}/git-secrets && \
     mv git-secrets-${GIT_SECRETS_VERSION}/git-secrets /usr/local/bin/git-secrets && \
+    chmod 0755 /usr/local/bin/git-secrets && \
     rm -rf git-secrets*
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
