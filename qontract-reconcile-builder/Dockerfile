@@ -10,6 +10,7 @@ RUN dnf install -y \
         gcc \
         gcc-c++ \
         openssl \
-        glibc-langpack-en && \
+        glibc-langpack-en \
+        git && \
     dnf clean all && \
     update-alternatives --set python3 /usr/bin/python3.9
