@@ -84,6 +84,7 @@ COPY --chown=0:0 --from=downloader \
     /usr/local/bin/
 
 RUN mkdir -p ${TF_PLUGIN_CACHE_DIR} && \
+    chmod 0775 ${TF_PLUGIN_CACHE_DIR} && \
     microdnf upgrade -y && \
     microdnf install \
         git \
