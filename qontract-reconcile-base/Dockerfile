@@ -92,5 +92,6 @@ RUN mkdir -p ${TF_PLUGIN_CACHE_DIR} && \
         openssh-clients \
         openssl \
         python3.9 \
-        skopeo && \
+        skopeo \
+        findutils && \
     microdnf clean all
