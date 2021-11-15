@@ -6,6 +6,7 @@ ENV LC_ALL=en_US.utf8
 ENV LANG=en_US.utf8
 
 ENV TF_PROVIDER_AWS_VERSIONS="3.22.0 3.30.0"
+ENV TF_PROVIDER_RANDOM_VERSIONS="3.1.0"
 ENV TF_PROVIDER_TIME_VERSIONS="0.7.2"
 ENV OC_VERSION=4.8.11
 ENV TF_VERSION=0.13.7
@@ -26,6 +27,13 @@ RUN for version in ${TF_PROVIDER_TIME_VERSIONS}; do \
     curl -sfL https://releases.hashicorp.com/terraform-provider-time/${version}/terraform-provider-time_${version}_linux_amd64.zip \
     -o /tmp/package-time-${version}.zip; \
     unzip /tmp/package-time-${version}.zip -d /tmp/terraform-providers/time/${version}/linux_amd64/; \
+    done
+
+RUN for version in ${TF_PROVIDER_RANDOM_VERSIONS}; do \
+    mkdir -p /tmp/terraform-providers/random/${version}/linux_amd64 ;\
+    curl -sfL https://releases.hashicorp.com/terraform-provider-random/${version}/terraform-provider-random_${version}_linux_amd64.zip \
+    -o /tmp/package-random-${version}.zip; \
+    unzip /tmp/package-random-${version}.zip -d /tmp/terraform-providers/random/${version}/linux_amd64/; \
     done
 
 RUN dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
