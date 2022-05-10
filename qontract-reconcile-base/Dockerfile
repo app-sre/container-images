@@ -11,6 +11,7 @@ ENV TF_PROVIDER_TIME_VERSIONS="0.7.2"
 ENV TF_PROVIDER_TEMPLATE_VERSIONS="2.2.0"
 ENV OC_VERSION=4.8.11
 ENV TF_VERSION=0.13.7
+ENV HELM_VERSION=3.6.2
 ENV GIT_SECRETS_VERSION=1.3.0
 ENV PROMETHEUS_VERSION=2.33.3
 ENV ALERTMANAGER_VERSION=0.21.0
@@ -61,6 +62,10 @@ RUN curl -sfL https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_$
     unzip terraform.zip && \
     mv terraform /usr/local/bin/terraform && \
     rm terraform.zip
+
+RUN curl -L https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz | tar xvz && \
+    mv linux-amd64/helm /usr/local/bin/helm && \
+    chmod +x /usr/local/bin/helm
 
 RUN curl -sfL https://github.com/awslabs/git-secrets/archive/${GIT_SECRETS_VERSION}.tar.gz \
     -o git-secrets.tar.gz && \
