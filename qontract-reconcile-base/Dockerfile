@@ -98,6 +98,7 @@ COPY --chown=0:0 --from=downloader \
     /usr/local/bin/kubectl \
     /usr/local/bin/oc \
     /usr/local/bin/terraform \
+    /usr/local/bin/helm \
     /usr/local/bin/git-secrets \
     /usr/local/bin/promtool \
     /usr/local/bin/amtool \
