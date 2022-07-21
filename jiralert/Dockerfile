@@ -4,7 +4,7 @@ ENV GO111MODULE=on
 USER root
 WORKDIR /go/src/github.com/prometheus-community/jiralert
 RUN git clone \
-    -b 1.2 \
+    -b 1.1 \
     https://github.com/prometheus-community/jiralert.git .
 RUN make
 
