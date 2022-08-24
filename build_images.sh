@@ -43,8 +43,11 @@ function get_commit_range() {
         commit_range="$(git merge-base HEAD remotes/origin/master)...$(git rev-parse HEAD)"
         ;;
     build)
-        check_vars GIT_PREVIOUS_COMMIT GIT_COMMIT || return 1
-        commit_range="$GIT_PREVIOUS_COMMIT...$GIT_COMMIT"
+        # APPSRE-4551, load the commit of the last successful build from Git
+        # as $GIT_PREVIOUS_COMMIT isn't guaranteed to have a value after Jenkins cleanup
+        PREVIOUS_BUILD_SHA="$(cat ./PREVIOUS_BUILD_SHA)"
+        check_vars PREVIOUS_BUILD_SHA GIT_COMMIT || return 1
+        commit_range="$PREVIOUS_BUILD_SHA...$GIT_COMMIT"
         ;;
     *)
         log "Unknown origin $origin. It should be either 'pr' or 'build'"
@@ -77,6 +80,18 @@ function get_authenticated_docker_command() {
     fi
 
     echo "$docker_authd"
+}
+
+function update_previous_build_sha() {
+    echo "$GIT_COMMIT" > ./PREVIOUS_BUILD_SHA
+    git add .
+    git commit -m "Update previous successful build"
+
+    IFS="/"
+    read -ra branch <<< "$GIT_BRANCH"
+    git push -u "${branch[0]}" "${branch[1]}"
+
+    log "Updated the previous successful build in Git to $GIT_COMMIT"
 }
 
 function main() {
@@ -137,6 +152,8 @@ function main() {
             [[ -z "$DRY_RUN" ]] && $docker_authd push "$latest_image"
         fi
     done
+
+    [[ -z "$DRY_RUN" ]] && [[ "$origin" == "build" ]] && update_previous_build_sha
 
     return $rc
 }
