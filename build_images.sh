@@ -90,12 +90,10 @@ function update_previous_build_sha() {
     git add .
     git commit -m "Update previous successful build"
 
-    # splitting the GIT_BRANCH variable provided by the Jenkins plugin 
-    # which is in the format origin/master
+    # pushing to GitHub using the AppSRE Bot 
+    # push token to the branch we are working on (typically master)
     # https://plugins.jenkins.io/git/#plugin-content-branch-variables
-    IFS="/"
-    read -ra branch <<< "$GIT_BRANCH"
-    git push -u "${branch[0]}" "${branch[1]}"
+    git push "https://${APP_SRE_BOT_PUSH_TOKEN}@github.com/app-sre/container-images.git" "${GIT_LOCAL_BRANCH}"
 
     log "Updated the previous successful build in Git to $GIT_COMMIT"
 }
