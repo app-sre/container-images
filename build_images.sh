@@ -88,10 +88,16 @@ function update_previous_build_sha() {
 
     echo "$GIT_COMMIT" > $PREVIOUS_BUILD_SHA_FILE
     git add .
-    git commit -m "update previous successful build"
-    # pushing is handled via a Git publisher in the Jenkins job
-    # that runs this script 
-    # https://jenkins-job-builder.readthedocs.io/en/latest/publishers.html?highlight=publisher#publishers.git
+    git commit -m "Update previous successful build"
+
+    # splitting the GIT_BRANCH variable provided by the Jenkins plugin 
+    # which is in the format origin/master
+    # https://plugins.jenkins.io/git/#plugin-content-branch-variables
+    IFS="/"
+    read -ra branch <<< "$GIT_BRANCH"
+    git push -u "${branch[0]}" "${branch[1]}"
+
+    log "Updated the previous successful build in Git to $GIT_COMMIT"
 }
 
 function main() {
