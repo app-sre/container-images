@@ -86,7 +86,7 @@ function get_authenticated_docker_command() {
 function update_previous_build_sha() {
     check_vars GIT_COMMIT GIT_BRANCH || return 1
 
-    echo "$GIT_COMMIT" > $PREVIOUS_BUILD_SHA_FILE
+    echo "$GIT_COMMIT" > "$PREVIOUS_BUILD_SHA_FILE"
     git add .
     git commit -m "Update previous successful build"
 
