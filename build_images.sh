@@ -9,6 +9,7 @@ DOCKER_REGISTRY=${DOCKER_REGISTRY:-quay.io}
 DOCKER_ORG=${DOCKER_ORG:-app-sre}
 SET_X=${SET_X:-}
 [[ -n "$SET_X" ]] && set -x
+PREVIOUS_BUILD_SHA_FILE=./PREVIOUS_BUILD_SHA
 
 # This could be defined inside get_authenticated_docker_command
 # but some bash interpreters were executing this on function exit
@@ -43,8 +44,11 @@ function get_commit_range() {
         commit_range="$(git merge-base HEAD remotes/origin/master)...$(git rev-parse HEAD)"
         ;;
     build)
-        check_vars GIT_PREVIOUS_COMMIT GIT_COMMIT || return 1
-        commit_range="$GIT_PREVIOUS_COMMIT...$GIT_COMMIT"
+        # APPSRE-4551, load the commit of the last successful build from Git
+        # as $GIT_PREVIOUS_COMMIT isn't guaranteed to have a value after Jenkins cleanup
+        local previous_build_sha="$(cat ${PREVIOUS_BUILD_SHA_FILE})"
+        check_vars GIT_COMMIT || return 1
+        commit_range="$previous_build_sha...$GIT_COMMIT"
         ;;
     *)
         log "Unknown origin $origin. It should be either 'pr' or 'build'"
@@ -77,6 +81,21 @@ function get_authenticated_docker_command() {
     fi
 
     echo "$docker_authd"
+}
+
+function update_previous_build_sha() {
+    check_vars GIT_COMMIT GIT_LOCAL_BRANCH APP_SRE_BOT_PUSH_TOKEN || return 1
+
+    echo "$GIT_COMMIT" > "$PREVIOUS_BUILD_SHA_FILE"
+    git add .
+    git commit -m "Update previous successful build"
+
+    # pushing to GitHub using the AppSRE Bot 
+    # push token to the branch we are working on (typically master)
+    # https://plugins.jenkins.io/git/#plugin-content-branch-variables
+    git push "https://${APP_SRE_BOT_PUSH_TOKEN}@github.com/app-sre/container-images.git" "${GIT_LOCAL_BRANCH}"
+
+    log "Updated the previous successful build in Git to $GIT_COMMIT"
 }
 
 function main() {
@@ -137,6 +156,8 @@ function main() {
             [[ -z "$DRY_RUN" ]] && $docker_authd push "$latest_image"
         fi
     done
+
+    [[ -z "$DRY_RUN" ]] && [[ "$origin" == "build" ]] && update_previous_build_sha || return 1
 
     return $rc
 }
