@@ -84,16 +84,14 @@ function get_authenticated_docker_command() {
 }
 
 function update_previous_build_sha() {
-    check_vars GIT_COMMIT GIT_LOCAL_BRANCH APP_SRE_BOT_PUSH_TOKEN || return 1
+    check_vars GIT_COMMIT APP_SRE_BOT_PUSH_TOKEN || return 1
 
     echo "$GIT_COMMIT" > "$PREVIOUS_BUILD_SHA_FILE"
     git add .
     git commit -m "Update previous successful build"
 
-    # pushing to GitHub using the AppSRE Bot 
-    # push token to the branch we are working on (typically master)
-    # https://plugins.jenkins.io/git/#plugin-content-branch-variables
-    git push "https://${APP_SRE_BOT_PUSH_TOKEN}@github.com/app-sre/container-images.git" "${GIT_LOCAL_BRANCH}"
+    # pushing to GitHub using the AppSRE Bot account
+    git push "https://${APP_SRE_BOT_PUSH_TOKEN}@github.com/app-sre/container-images.git" master
 
     log "Updated the previous successful build in Git to $GIT_COMMIT"
 }
