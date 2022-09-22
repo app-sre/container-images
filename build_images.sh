@@ -84,14 +84,17 @@ function get_authenticated_docker_command() {
 }
 
 function update_previous_build_sha() {
+    local branch="master"
     check_vars GIT_COMMIT APP_SRE_BOT_PUSH_TOKEN || return 1
+
+    git checkout ${branch}
 
     echo "$GIT_COMMIT" > "$PREVIOUS_BUILD_SHA_FILE"
     git add .
     git commit -m "Update previous successful build"
 
     # pushing to GitHub using the AppSRE Bot account
-    git push "https://${APP_SRE_BOT_PUSH_TOKEN}@github.com/app-sre/container-images.git" master
+    git push "https://${APP_SRE_BOT_PUSH_TOKEN}@github.com/app-sre/container-images.git" ${branch}
 
     log "Updated the previous successful build in Git to $GIT_COMMIT"
 }
