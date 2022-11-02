@@ -115,7 +115,7 @@ function main() {
     local changed=$(get_changed_dockerfiles "$commit_range")
     if [[ -z "$changed" ]]; then
         log "No VERSION files changed. Exiting"
-        [[ "$origin" == "pr" ]] && return 1 || return 0
+        return 0
     fi
 
     log "Changed directories are: $changed"
@@ -158,7 +158,9 @@ function main() {
         fi
     done
 
-    [[ -z "$DRY_RUN" ]] && [[ "$origin" == "build" ]] && update_previous_build_sha || return 1
+    if [[ -z "$DRY_RUN" ]] && [[ "$origin" == "build" ]]; then
+        update_previous_build_sha || return 1
+    fi
 
     return $rc
 }
