@@ -6,6 +6,7 @@ ENV LC_ALL=en_US.utf8
 ENV LANG=en_US.utf8
 
 ENV TF_PROVIDER_AWS_VERSIONS="3.75.2"
+ENV TF_PROVIDER_CLOUDFLARE_VERSIONS="3.23.0"
 ENV TF_PROVIDER_RANDOM_VERSIONS="3.1.0"
 ENV TF_PROVIDER_TIME_VERSIONS="0.7.2"
 ENV TF_PROVIDER_TEMPLATE_VERSIONS="2.2.0"
@@ -18,31 +19,38 @@ ENV ALERTMANAGER_VERSION=0.24.0
 
 
 RUN for version in ${TF_PROVIDER_AWS_VERSIONS}; do \
-    mkdir -p /tmp/terraform-providers/aws/${version}/linux_amd64 ;\
+    mkdir -p /tmp/terraform-providers/hashicorp/aws/${version}/linux_amd64 ;\
     curl -sfL https://releases.hashicorp.com/terraform-provider-aws/${version}/terraform-provider-aws_${version}_linux_amd64.zip \
     -o /tmp/package-aws-${version}.zip; \
-    unzip /tmp/package-aws-${version}.zip -d /tmp/terraform-providers/aws/${version}/linux_amd64/; \
+    unzip /tmp/package-aws-${version}.zip -d /tmp/terraform-providers/hashicorp/aws/${version}/linux_amd64/; \
+    done
+
+RUN for version in ${TF_PROVIDER_CLOUDFLARE_VERSIONS}; do \
+    mkdir -p /tmp/terraform-providers/cloudflare/cloudflare/${version}/linux_amd64 ;\
+    curl -sfL https://releases.hashicorp.com/terraform-provider-cloudflare/${version}/terraform-provider-cloudflare_${version}_linux_amd64.zip \
+    -o /tmp/package-cloudflare-${version}.zip; \
+    unzip /tmp/package-cloudflare-${version}.zip -d /tmp/terraform-providers/cloudflare/cloudflare/${version}/linux_amd64/; \
     done
 
 RUN for version in ${TF_PROVIDER_TIME_VERSIONS}; do \
-    mkdir -p /tmp/terraform-providers/time/${version}/linux_amd64 ;\
+    mkdir -p /tmp/terraform-providers/hashicorp/time/${version}/linux_amd64 ;\
     curl -sfL https://releases.hashicorp.com/terraform-provider-time/${version}/terraform-provider-time_${version}_linux_amd64.zip \
     -o /tmp/package-time-${version}.zip; \
-    unzip /tmp/package-time-${version}.zip -d /tmp/terraform-providers/time/${version}/linux_amd64/; \
+    unzip /tmp/package-time-${version}.zip -d /tmp/terraform-providers/hashicorp/time/${version}/linux_amd64/; \
     done
 
 RUN for version in ${TF_PROVIDER_RANDOM_VERSIONS}; do \
-    mkdir -p /tmp/terraform-providers/random/${version}/linux_amd64 ;\
+    mkdir -p /tmp/terraform-providers/hashicorp/random/${version}/linux_amd64 ;\
     curl -sfL https://releases.hashicorp.com/terraform-provider-random/${version}/terraform-provider-random_${version}_linux_amd64.zip \
     -o /tmp/package-random-${version}.zip; \
-    unzip /tmp/package-random-${version}.zip -d /tmp/terraform-providers/random/${version}/linux_amd64/; \
+    unzip /tmp/package-random-${version}.zip -d /tmp/terraform-providers/hashicorp/random/${version}/linux_amd64/; \
     done
 
 RUN for version in ${TF_PROVIDER_TEMPLATE_VERSIONS}; do \
-    mkdir -p /tmp/terraform-providers/template/${version}/linux_amd64 ;\
+    mkdir -p /tmp/terraform-providers/hashicorp/template/${version}/linux_amd64 ;\
     curl -sfL https://releases.hashicorp.com/terraform-provider-template/${version}/terraform-provider-template_${version}_linux_amd64.zip \
     -o /tmp/package-template-${version}.zip; \
-    unzip /tmp/package-template-${version}.zip -d /tmp/terraform-providers/template/${version}/linux_amd64/; \
+    unzip /tmp/package-template-${version}.zip -d /tmp/terraform-providers/hashicorp/template/${version}/linux_amd64/; \
     done
 
 RUN dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
@@ -91,7 +99,7 @@ ENV TF_PLUGIN_CACHE_DIR=/.terraform.d/plugin-cache/
 # Terraform providers
 COPY --chown=0:0 --from=downloader \
     /tmp/terraform-providers/ \
-    ${TF_PLUGIN_LOCAL_DIR}/plugins/registry.terraform.io/hashicorp/
+    ${TF_PLUGIN_LOCAL_DIR}/plugins/registry.terraform.io/
 
 # Tooling binaries
 COPY --chown=0:0 --from=downloader \
