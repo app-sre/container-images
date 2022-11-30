@@ -1,4 +1,4 @@
-FROM quay.io/app-sre/qontract-reconcile-base:0.8.7 as base
+FROM quay.io/app-sre/qontract-reconcile-base:0.8.8 as base
 
 WORKDIR /work
 
