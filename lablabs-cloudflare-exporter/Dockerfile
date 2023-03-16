@@ -1,10 +1,10 @@
-FROM registry.access.redhat.com/ubi8/go-toolset:1.15.14 as builder
+FROM registry.access.redhat.com/ubi8/go-toolset:1.18.9 as builder
 ENV GOPATH=/go/
 ENV GO111MODULE=on
 USER root
 WORKDIR /go/src/github.com/app-sre/cloudflare-exporter
 RUN git clone \
-    -b 0.0.13 \
+    -b 0.0.14-fork-lp-metrics \
     https://github.com/app-sre/cloudflare-exporter.git .
 # RUN go get -d -v
 RUN CGO_ENABLED=0 GOOS=linux go build -o cloudflare_exporter .
