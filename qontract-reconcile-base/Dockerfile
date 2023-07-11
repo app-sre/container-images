@@ -91,7 +91,7 @@ RUN curl -sfL https://github.com/prometheus/alertmanager/releases/download/v${AL
     | tar -zxf - -C /usr/local/bin --strip-components=1 alertmanager-${ALERTMANAGER_VERSION}.linux-amd64/amtool
 
 
-FROM registry.access.redhat.com/ubi8/ubi-minimal:8.8
+FROM registry.access.redhat.com/ubi9/ubi-minimal:9.2
 
 ENV TF_PLUGIN_LOCAL_DIR=/usr/local/share/terraform/
 ENV TF_PLUGIN_CACHE_DIR=/.terraform.d/plugin-cache/
@@ -116,12 +116,12 @@ COPY --chown=0:0 --from=downloader \
 RUN mkdir -p ${TF_PLUGIN_CACHE_DIR} && \
     chmod 0775 ${TF_PLUGIN_CACHE_DIR} && \
     microdnf upgrade -y && \
-    microdnf install \
+    microdnf install -y \
         git \
         glibc-langpack-en \
         openssh-clients \
         openssl \
-        python3.9 \
+        python3.11 \
         skopeo \
         findutils && \
     microdnf clean all
