@@ -124,4 +124,6 @@ RUN mkdir -p ${TF_PLUGIN_CACHE_DIR} && \
         python3.11 \
         skopeo \
         findutils && \
-    microdnf clean all
+    microdnf clean all && \
+    update-alternatives --install /usr/bin/python3 python /usr/bin/python3.11 1 && \
+    python3 -m ensurepip

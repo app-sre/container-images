@@ -1,4 +1,4 @@
-FROM quay.io/app-sre/qontract-reconcile-base:0.10.0 as base
+FROM quay.io/app-sre/qontract-reconcile-base:0.10.1 as base
 
 WORKDIR /work
 
@@ -13,8 +13,5 @@ RUN mkdir ~/.gnupg && \
         gnupg2 \
         make \
         openssl \
-        python3.11 \
         python3.11-devel && \
-    microdnf clean all && \
-    update-alternatives --install /usr/bin/python3 python /usr/bin/python3.11 1 && \
-    python3 -m ensurepip
+    microdnf clean all
