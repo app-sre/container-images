@@ -119,6 +119,7 @@ RUN mkdir -p ${TF_PLUGIN_CACHE_DIR} && \
     microdnf install -y \
         git \
         glibc-langpack-en \
+        libpq \
         openssh-clients \
         openssl \
         python3.11 \
