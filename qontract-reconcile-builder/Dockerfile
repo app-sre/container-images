@@ -11,6 +11,7 @@ RUN mkdir ~/.gnupg && \
         glibc-langpack-en \
         git \
         gnupg2 \
+        libpq-devel \
         make \
         openssl \
         python3.11-devel && \
