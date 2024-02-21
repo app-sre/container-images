@@ -10,6 +10,8 @@ ENV TF_PROVIDER_CLOUDFLARE_VERSIONS="3.32.0"
 ENV TF_PROVIDER_RANDOM_VERSIONS="3.4.3"
 ENV TF_PROVIDER_TIME_VERSIONS="0.9.1"
 ENV TF_PROVIDER_TEMPLATE_VERSIONS="2.2.0"
+# be careful about changing OC version and consult with FT-3 to check with what OpenShift
+# cluster versions are running as they differ from commercial
 ENV OC_VERSION=4.12.46
 ENV TF_VERSION=0.13.7
 ENV HELM_VERSION=3.11.1
