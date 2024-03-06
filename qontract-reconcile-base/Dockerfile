@@ -5,7 +5,7 @@ RUN dnf -y install unzip glibc-langpack-en
 ENV LC_ALL=en_US.utf8
 ENV LANG=en_US.utf8
 
-ENV TF_PROVIDER_AWS_VERSIONS="3.76.0 3.76.1 4.67.0"
+ENV TF_PROVIDER_AWS_VERSIONS="3.76.0 3.76.1 4.67.0 5.39.1"
 ENV TF_PROVIDER_CLOUDFLARE_VERSIONS="3.32.0"
 ENV TF_PROVIDER_RANDOM_VERSIONS="3.4.3"
 ENV TF_PROVIDER_TIME_VERSIONS="0.9.1"
@@ -13,7 +13,7 @@ ENV TF_PROVIDER_TEMPLATE_VERSIONS="2.2.0"
 # be careful about changing OC version and consult with FT-3 to check with what OpenShift
 # cluster versions are running as they differ from commercial
 ENV OC_VERSION=4.12.46
-ENV TF_VERSION=0.13.7
+ENV TF_VERSION=1.7.4
 ENV HELM_VERSION=3.11.1
 ENV GIT_SECRETS_VERSION=1.3.0
 ENV PROMETHEUS_VERSION=2.33.3
