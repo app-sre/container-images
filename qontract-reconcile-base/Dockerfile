@@ -13,7 +13,7 @@ ENV TF_PROVIDER_TEMPLATE_VERSIONS="2.2.0"
 # be careful about changing OC version and consult with FT-3 to check with what OpenShift
 # cluster versions are running as they differ from commercial
 ENV OC_VERSION=4.12.46
-ENV TF_VERSION=1.7.4
+ENV TF_VERSION=1.5.5
 ENV HELM_VERSION=3.11.1
 ENV GIT_SECRETS_VERSION=1.3.0
 ENV PROMETHEUS_VERSION=2.33.3
