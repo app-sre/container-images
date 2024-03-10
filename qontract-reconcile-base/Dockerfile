@@ -29,8 +29,7 @@ RUN for version in ${TF_PROVIDER_AWS_VERSIONS}; do \
 
 RUN for version in ${TF_PROVIDER_CLOUDFLARE_VERSIONS}; do \
     mkdir -p /tmp/terraform-providers/cloudflare/cloudflare/${version}/linux_amd64 ;\
-    curl -sfL https://releases.hashicorp.com/terraform-provider-cloudflare/${version}/terraform-provider-cloudflare_${version}_linux_amd64.zip \
-    -o /tmp/package-cloudflare-${version}.zip; \
+    curl -sfL https://github.com/cloudflare/terraform-provider-cloudflare/releases/download/v${version}/terraform-provider-cloudflare_${version}_linux_amd64.zip \    -o /tmp/package-cloudflare-${version}.zip; \
     unzip /tmp/package-cloudflare-${version}.zip -d /tmp/terraform-providers/cloudflare/cloudflare/${version}/linux_amd64/; \
     done
 
