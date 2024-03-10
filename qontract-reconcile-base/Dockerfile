@@ -6,7 +6,7 @@ ENV LC_ALL=en_US.utf8
 ENV LANG=en_US.utf8
 
 ENV TF_PROVIDER_AWS_VERSIONS="3.76.0 3.76.1 4.67.0"
-ENV TF_PROVIDER_CLOUDFLARE_VERSIONS="3.32.0"
+ENV TF_PROVIDER_CLOUDFLARE_VERSIONS="3.32.0 3.35.0"
 ENV TF_PROVIDER_RANDOM_VERSIONS="3.4.3"
 ENV TF_PROVIDER_TIME_VERSIONS="0.9.1"
 ENV TF_PROVIDER_TEMPLATE_VERSIONS="2.2.0"
@@ -29,8 +29,7 @@ RUN for version in ${TF_PROVIDER_AWS_VERSIONS}; do \
 
 RUN for version in ${TF_PROVIDER_CLOUDFLARE_VERSIONS}; do \
     mkdir -p /tmp/terraform-providers/cloudflare/cloudflare/${version}/linux_amd64 ;\
-    curl -sfL https://releases.hashicorp.com/terraform-provider-cloudflare/${version}/terraform-provider-cloudflare_${version}_linux_amd64.zip \
-    -o /tmp/package-cloudflare-${version}.zip; \
+    curl -sfL https://github.com/cloudflare/terraform-provider-cloudflare/releases/download/v${version}/terraform-provider-cloudflare_${version}_linux_amd64.zip \    -o /tmp/package-cloudflare-${version}.zip; \
     unzip /tmp/package-cloudflare-${version}.zip -d /tmp/terraform-providers/cloudflare/cloudflare/${version}/linux_amd64/; \
     done
 
