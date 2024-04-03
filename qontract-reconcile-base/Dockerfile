@@ -13,7 +13,7 @@ ENV TF_PROVIDER_TEMPLATE_VERSIONS="2.2.0"
 # be careful about changing OC version and consult with FT-3 to check with what OpenShift
 # cluster versions are running as they differ from commercial
 ENV OC_VERSION=4.12.46
-ENV TF_VERSION=1.5.7
+ENV TF_VERSION=1.6.2
 ENV HELM_VERSION=3.11.1
 ENV GIT_SECRETS_VERSION=1.3.0
 ENV PROMETHEUS_VERSION=2.33.3
@@ -67,11 +67,12 @@ RUN curl -sfL https://mirror.openshift.com/pub/openshift-v4/clients/ocp/${OC_VER
     mv oc kubectl /usr/local/bin && \
     rm oc.tar.gz
 
-RUN curl -sfL https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip \
-    -o terraform.zip && \
-    unzip terraform.zip && \
-    mv terraform /usr/local/bin/terraform && \
-    rm terraform.zip
+RUN curl -sfL https://github.com/opentofu/opentofu/releases/download/v${TF_VERSION}/tofu_${TF_VERSION}_linux_amd64.zip \
+    -o tofu.zip && \
+    mkdir -p /tmp/tofu && \
+    unzip tofu.zip -d /tmp/tofu && \
+    mv /tmp/tofu/tofu /usr/local/bin/terraform && \
+    rm tofu.zip
 
 RUN curl -L https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz | tar xvz && \
     mv linux-amd64/helm /usr/local/bin/helm && \
