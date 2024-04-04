@@ -1,4 +1,4 @@
-# Build and AppSRE FedRamp-centric container for debugging issues (see git clone below)
+# Build an AppSRE FedRamp-centric container for debugging issues (see git clone below)
 # Do NOT install any version of OpenSSL as it will break other tools (ex: psql)
 # NOTE: postgres utils here are set to v14 by design
 FROM quay.io/fedora/fedora:39
