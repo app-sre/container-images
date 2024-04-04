@@ -1,0 +1,142 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: debug-container-fedramp-with-pvc
+objects:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      ignore-check.kube-linter.io/minimum-three-replicas: "skip"
+    labels:
+      app: debug-container-fedramp
+    name: debug-container-fedramp
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 2
+    selector:
+      matchLabels:
+        app: debug-container-fedramp
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 0
+        maxSurge: 1
+    template:
+      metadata:
+        labels:
+          app: debug-container-fedramp
+      spec:
+        containers:
+        - image: ${IMAGE}:${IMAGE_TAG}
+          name: debug-container-fedramp
+          resources:
+            limits:
+              cpu: ${{CPU_LIMIT}}
+              memory: ${{MEMORY_LIMIT}}
+            requests:
+              cpu: ${{CPU_REQUEST}}
+              memory: ${{MEMORY_REQUEST}}
+          volumeMounts:
+          - name: debug-container-fedramp
+            mountPath: /data
+          env:
+          - name: PGHOST
+            valueFrom:
+              secretKeyRef:
+                name: ${{POSTGRES_DB_SECRET_NAME}}
+                key: "db.host"
+                optional: true
+          - name: PGPORT
+            valueFrom:
+              secretKeyRef:
+                name: ${{POSTGRES_DB_SECRET_NAME}}
+                key: "db.port"
+                optional: true
+          - name: PGDATABASE
+            valueFrom:
+              secretKeyRef:
+                name: ${{POSTGRES_DB_SECRET_NAME}}
+                key: "db.name"
+                optional: true
+          - name: PGUSER
+            valueFrom:
+              secretKeyRef:
+                name: ${{POSTGRES_DB_SECRET_NAME}}
+                key: "db.user"
+                optional: true
+          - name: PGPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: ${{POSTGRES_DB_SECRET_NAME}}
+                key: "db.password"
+                optional: true
+          - name: PGSSLMODE
+            value: ${{PGSSLMODE}}
+            optional: true
+          - name: PGCONNECT_TIMEOUT
+            value: ${PGCONNECT_TIMEOUT}
+            optional: true
+          - name: REDISCLI_AUTH
+            valueFrom:
+              secretKeyRef:
+                name: ${{REDIS_SECRET_NAME}}
+                key: "db.auth_token"
+                optional: true
+          - name: REDISCLI_HOST
+            valueFrom:
+              secretKeyRef:
+                name: ${{REDIS_SECRET_NAME}}
+                key: "db.endpoint"
+                optional: true
+          - name: REDISCLI_PORT
+            valueFrom:
+              secretKeyRef:
+                name: ${{REDIS_SECRET_NAME}}
+                key: "db.port"
+                optional: true
+        volumes:
+        - name: debug-container-fedramp
+          persistentVolumeClaim:
+            claimName: debug-container-fedramp
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: debug-container-fedramp
+  spec:
+    accessModes:
+      - ReadWriteOnce
+    volumeMode: Filesystem
+    resources:
+      requests:
+        storage: ${PVC_SIZE}
+parameters:
+- name: IMAGE
+  value: quay.io/app-sre/debug-container-fedramp
+- name: IMAGE_TAG
+  value: latest
+- name: POSTGRES_DB_SECRET_NAME
+  value: "empty"
+- name: PGCONNECT_TIMEOUT
+  value: "30"
+  required: true
+- name: PGSSLMODE
+  value: "require"
+  required: true
+- name: CPU_REQUEST
+  value: "100m"
+  required: true
+- name: MEMORY_REQUEST
+  value: "128Mi"
+  required: true
+- name: MEMORY_LIMIT
+  value: "1Gi"
+  required: true
+- name: CPU_LIMIT
+  value: "1000m"
+  required: true
+- name: PVC_SIZE
+  value: "1Gi"
+  required: true
+- name: REDIS_SECRET_NAME
+  value: "empty"
