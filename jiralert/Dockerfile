@@ -6,7 +6,8 @@ WORKDIR /go/src/github.com/prometheus-community/jiralert
 RUN git clone \
     https://github.com/prometheus-community/jiralert.git .
 RUN git checkout d43cbab62126d543e8e789f6374d9e745693cce2
-RUN make
+# run just build and skip all other steps because the linter needs to much memory
+RUN make build
 
 FROM registry.access.redhat.com/ubi8-minimal:8.9
 RUN microdnf update -y \
