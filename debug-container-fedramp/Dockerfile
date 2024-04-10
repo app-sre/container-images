@@ -46,9 +46,14 @@ RUN git clone --depth 1 https://github.com/brendangregg/perf-tools
 
 RUN pip install awscli redis
 
+ADD root /
+
 ENV TERM=vt100
 
 ENV PS1="\[\e[31m\]\[\e[0m\]\ndebug-fedramp\[\e[0;32m\]\u\[\e[m\]@\[\e[0;33m\]\h\[\e[m\]:\[\e[0;34m\]\w\[\e[m\] \$ "
 
+RUN chmod 777 /run.sh 
+
 USER 0
 
+ENTRYPOINT ["/run.sh"]
