@@ -1,6 +1,6 @@
-=============================
-|| FedRamp Debug Container ||
-=============================
+========================
+ FedRamp Debug Container 
+========================
 
 - Use 'alternatives --config psql' to select version of psql client
 
