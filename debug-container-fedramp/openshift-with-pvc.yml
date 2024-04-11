@@ -30,6 +30,8 @@ objects:
         containers:
         - image: ${IMAGE}:${IMAGE_TAG}
           name: debug-container-fedramp
+          command: ["sleep"]
+          args: ["infinity"]
           resources:
             limits:
               cpu: ${{CPU_LIMIT}}
