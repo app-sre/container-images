@@ -49,5 +49,5 @@ ENV TERM=vt100
 
 ENV PS1="\[\e[31m\]\[\e[0m\]\ndebug-fedramp\[\e[0;32m\]\u\[\e[m\]@\[\e[0;33m\]\h\[\e[m\]:\[\e[0;34m\]\w\[\e[m\] \$ "
 
-USER 1000
+USER 0
 
