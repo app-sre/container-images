@@ -39,6 +39,8 @@ RUN sudo alternatives --install /usr/bin/psql psql /usr/pgsql-13/bin/psql 130 &&
     sudo alternatives --install /usr/bin/psql psql /usr/pgsql-15/bin/psql 150 && \
     sudo alternatives --install /usr/bin/psql psql /usr/pgsql-16/bin/psql 160 
 
+RUN chmod -R 775 /var/lib/alternatives/ 
+
 RUN git clone --depth 1 https://github.com/brendangregg/perf-tools
 
 RUN pip install awscli redis
