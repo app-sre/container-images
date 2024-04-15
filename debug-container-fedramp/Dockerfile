@@ -39,6 +39,8 @@ RUN sudo alternatives --install /usr/bin/psql psql /usr/pgsql-13/bin/psql 130 &&
     sudo alternatives --install /usr/bin/psql psql /usr/pgsql-15/bin/psql 150 && \
     sudo alternatives --install /usr/bin/psql psql /usr/pgsql-16/bin/psql 160 
 
+RUN chmod -R 775 /var/lib/alternatives/ 
+
 RUN git clone --depth 1 https://github.com/brendangregg/perf-tools
 
 RUN pip install awscli redis
@@ -47,5 +49,5 @@ ENV TERM=vt100
 
 ENV PS1="\[\e[31m\]\[\e[0m\]\ndebug-fedramp\[\e[0;32m\]\u\[\e[m\]@\[\e[0;33m\]\h\[\e[m\]:\[\e[0;34m\]\w\[\e[m\] \$ "
 
-USER 0
+USER 1000
 
