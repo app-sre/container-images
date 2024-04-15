@@ -50,7 +50,7 @@ RUN for version in ${TF_PROVIDER_RANDOM_VERSIONS}; do \
 
 RUN for version in ${TF_PROVIDER_CLOUDINIT_VERSIONS}; do \
     mkdir -p /tmp/terraform-providers/hashicorp/cloudinit/${version}/linux_amd64 ;\
-    curl -sfL https://releases.hashicorp.com/terraform-provider-cloudinit/${version}/terraform-provider-cloudinit${version}_linux_amd64.zip \
+    curl -sfL https://releases.hashicorp.com/terraform-provider-cloudinit/${version}/terraform-provider-cloudinit_${version}_linux_amd64.zip \
     -o /tmp/package-cloudinit-${version}.zip; \
     unzip /tmp/package-cloudinit-${version}.zip -d /tmp/terraform-providers/hashicorp/cloudinit/${version}/linux_amd64/; \
     done
