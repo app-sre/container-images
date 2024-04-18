@@ -9,7 +9,7 @@ ENV TF_PROVIDER_AWS_VERSIONS="3.76.0 3.76.1 4.67.0 5.39.1"
 ENV TF_PROVIDER_CLOUDFLARE_VERSIONS="3.32.0 4.26.0"
 ENV TF_PROVIDER_RANDOM_VERSIONS="3.4.3"
 ENV TF_PROVIDER_TIME_VERSIONS="0.9.1"
-ENV TF_PROVIDER_TEMPLATE_VERSIONS="2.2.0"
+ENV TF_PROVIDER_CLOUDINIT_VERSIONS="2.3.3"
 # be careful about changing OC version and consult with FT-3 to check with what OpenShift
 # cluster versions are running as they differ from commercial
 ENV OC_VERSION=4.12.46
@@ -48,11 +48,11 @@ RUN for version in ${TF_PROVIDER_RANDOM_VERSIONS}; do \
     unzip /tmp/package-random-${version}.zip -d /tmp/terraform-providers/hashicorp/random/${version}/linux_amd64/; \
     done
 
-RUN for version in ${TF_PROVIDER_TEMPLATE_VERSIONS}; do \
-    mkdir -p /tmp/terraform-providers/hashicorp/template/${version}/linux_amd64 ;\
-    curl -sfL https://releases.hashicorp.com/terraform-provider-template/${version}/terraform-provider-template_${version}_linux_amd64.zip \
-    -o /tmp/package-template-${version}.zip; \
-    unzip /tmp/package-template-${version}.zip -d /tmp/terraform-providers/hashicorp/template/${version}/linux_amd64/; \
+RUN for version in ${TF_PROVIDER_CLOUDINIT_VERSIONS}; do \
+    mkdir -p /tmp/terraform-providers/hashicorp/cloudinit/${version}/linux_amd64 ;\
+    curl -sfL https://releases.hashicorp.com/terraform-provider-cloudinit/${version}/terraform-provider-cloudinit_${version}_linux_amd64.zip \
+    -o /tmp/package-cloudinit-${version}.zip; \
+    unzip /tmp/package-cloudinit-${version}.zip -d /tmp/terraform-providers/hashicorp/cloudinit/${version}/linux_amd64/; \
     done
 
 RUN dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
