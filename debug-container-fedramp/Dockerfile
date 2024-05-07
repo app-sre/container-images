@@ -3,6 +3,8 @@
 # NOTE: postgres utils here are set to v14 by design
 FROM quay.io/fedora/fedora:39
 
+sudo fips-mode-setup --enable
+
 RUN dnf -y --refresh --security upgrade && \
         dnf -y install https://download.postgresql.org/pub/repos/yum/reporpms/F-39-x86_64/pgdg-fedora-repo-latest.noarch.rpm \
         python3-pip \
