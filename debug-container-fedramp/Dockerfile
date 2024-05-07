@@ -7,6 +7,9 @@ FROM quay.io/fedora/fedora:39
 
 RUN dnf -y --refresh --security upgrade && \
         dnf -y install https://download.postgresql.org/pub/repos/yum/reporpms/F-39-x86_64/pgdg-fedora-repo-latest.noarch.rpm \
+        dstat \
+        audit \ 
+        dracut \
         crypto-policies-scripts \
         python3-pip \
         python3-PyMySQL \
