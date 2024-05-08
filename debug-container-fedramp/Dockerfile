@@ -1,5 +1,5 @@
 # Build an AppSRE FedRamp-centric container for debugging issues (see git clone below)
-# Do NOT install any version of OpenSSL as it will break other tools (ex: psql)
+
 # NOTE: postgres utils here are set to v14 by design
 FROM quay.io/fedora/fedora:39
 
@@ -7,6 +7,7 @@ FROM quay.io/fedora/fedora:39
 
 RUN dnf -y --refresh --security upgrade && \
         dnf -y install https://download.postgresql.org/pub/repos/yum/reporpms/F-39-x86_64/pgdg-fedora-repo-latest.noarch.rpm \
+        openssl \
         dstat \
         audit \ 
         dracut \
@@ -34,7 +35,10 @@ RUN dnf -y --refresh --security upgrade && \
         alternatives \
     && dnf clean all
 
-RUN sudo fips-mode-setup --enable    
+RUN sudo fips-mode-setup --enable
+
+RUN export PGSSLCIPHERS='TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256'
+RUN export OPENSSL_FIPS=1
 
 RUN dnf -y install postgresql13 \
                    postgresql14 \
