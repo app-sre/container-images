@@ -6,12 +6,10 @@ FROM registry.access.redhat.com/ubi8/ubi:8.8
 
 
 RUN dnf -y --refresh --security upgrade && \
-        dnf -y install https://download.postgresql.org/pub/repos/yum/reporpms/F-39-x86_64/pgdg-fedora-repo-latest.noarch.rpm \
-        openssl \
+        dnf -y install https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-42.0-43PGDG.noarch.rpm \
         dstat \
         audit \ 
         dracut \
-        crypto-policies-scripts \
         python3-pip \
         python3-PyMySQL \
         python3-psycopg2 \
@@ -21,17 +19,14 @@ RUN dnf -y --refresh --security upgrade && \
         nmap \
         bind-utils \
         net-tools \
-        curl \
         traceroute \
         mtr \
         tcpdump \
-        community-mysql \
         rsync \
         skopeo \
         redis \
         tmux \
         iputils \
-        htop \
         alternatives \
     && dnf clean all
 
