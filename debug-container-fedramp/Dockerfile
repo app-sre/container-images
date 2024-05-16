@@ -1,7 +1,7 @@
 # Build an AppSRE FedRamp-centric container for debugging issues (see git clone below)
 
 # NOTE: postgres utils here are set to v14 by design
-FROM quay.io/fedora/fedora:39
+FROM registry.access.redhat.com/ubi8/ubi:8.8
 
 
 
@@ -37,7 +37,7 @@ RUN dnf -y --refresh --security upgrade && \
 
 RUN sudo fips-mode-setup --enable
 
-RUN export PGSSLCIPHERS='TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256'
+RUN export PGSSLCIPHERS='TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256:scram-sha-256'
 RUN export OPENSSL_FIPS=1
 
 RUN dnf -y install postgresql13 \
