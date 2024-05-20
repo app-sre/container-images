@@ -30,7 +30,6 @@ RUN dnf -y --refresh --security upgrade && \
         alternatives \
     && dnf clean all
 
-RUN sudo fips-mode-setup --enable
 
 RUN export PGSSLCIPHERS='TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256:scram-sha-256'
 RUN export OPENSSL_FIPS=1
