@@ -6,7 +6,7 @@ FROM registry.access.redhat.com/ubi8/ubi:8.8
 SHELL ["/bin/bash","-c"]
 
 RUN dnf -y --refresh --security upgrade && \
-        dnf -y install https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-42.0-43PGDG.noarch.rpm \
+    dnf -y install dnf-utils \
         dracut \
         python3-pip \
         python3-PyMySQL \
@@ -18,17 +18,19 @@ RUN dnf -y --refresh --security upgrade && \
         rsync \
         skopeo \
         iputils \
-        alternatives \
+        alternatives 
+    
+RUN dnf config-manager --add-repo https://download.postgresql.org/pub/repos/yum/13/redhat/rhel-8.8-x86_64 \
+    && dnf config-manager --add-repo https://download.postgresql.org/pub/repos/yum/14/redhat/rhel-8.8-x86_64 \
+    && dnf config-manager --add-repo https://download.postgresql.org/pub/repos/yum/15/redhat/rhel-8.8-x86_64 \
+    && dnf config-manager --add-repo https://download.postgresql.org/pub/repos/yum/16/redhat/rhel-8.8-x86_64 \
+    && dnf -y --nogpgcheck install postgresql13 postgresql14 postgresql15 postgresql16 \
     && dnf clean all
+
 
 
 RUN export PGSSLCIPHERS='TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256:scram-sha-256'
 RUN export OPENSSL_FIPS=1
-
-RUN dnf -y install postgresql13 \
-                   postgresql14 \
-                   postgresql15 \
-                   postgresql16 
 
 
 RUN alternatives --install /usr/bin/psql psql /usr/pgsql-13/bin/psql 130 && \
