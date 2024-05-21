@@ -23,7 +23,8 @@ RUN dnf -y config-manager --add-repo https://download.postgresql.org/pub/repos/y
     && dnf -y config-manager --add-repo https://download.postgresql.org/pub/repos/yum/15/redhat/rhel-8.8-x86_64 \
     && dnf -y config-manager --add-repo https://download.postgresql.org/pub/repos/yum/16/redhat/rhel-8.8-x86_64 \
     && dnf update -y \
-    && dnf repolist
+    && dnf repolist \
+    && dnf module enable postgresql13
 RUN dnf -y --nogpgcheck install postgresql13 postgresql14 postgresql15 postgresql16 \
     && dnf clean all
 
