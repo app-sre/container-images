@@ -3,8 +3,6 @@
 # NOTE: postgres utils here are set to v14 by design
 FROM registry.access.redhat.com/ubi8/ubi:8.8
 
-SHELL ["/bin/bash","-c"]
-
 RUN dnf -y --refresh --security upgrade && \
     dnf -y install dnf-utils \
         dracut \
@@ -24,7 +22,8 @@ RUN dnf -y config-manager --add-repo https://download.postgresql.org/pub/repos/y
     && dnf -y config-manager --add-repo https://download.postgresql.org/pub/repos/yum/14/redhat/rhel-8.8-x86_64 \
     && dnf -y config-manager --add-repo https://download.postgresql.org/pub/repos/yum/15/redhat/rhel-8.8-x86_64 \
     && dnf -y config-manager --add-repo https://download.postgresql.org/pub/repos/yum/16/redhat/rhel-8.8-x86_64 \
-    && dnf update -y
+    && dnf update -y \
+    && dnf repolist
 RUN dnf -y --nogpgcheck install postgresql13 postgresql14 postgresql15 postgresql16 \
     && dnf clean all
 
