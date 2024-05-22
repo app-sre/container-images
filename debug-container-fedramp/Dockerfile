@@ -24,12 +24,13 @@ RUN dnf -y config-manager --add-repo https://download.postgresql.org/pub/repos/y
     && dnf -y config-manager --add-repo https://download.postgresql.org/pub/repos/yum/15/redhat/rhel-8.8-x86_64 \
     && dnf -y config-manager --add-repo https://download.postgresql.org/pub/repos/yum/16/redhat/rhel-8.8-x86_64 \
     && dnf update -y \
-    && dnf repolist 
+    && dnf repolist \
+    && dnf module disable postgresql
     #&& dnf -y module enable postgresql:13 postgresql:14 postgresql:15 postgresql:16 \
 RUN dnf -y --nogpgcheck install postgresql13 \ 
-                                   postgresql14 \
-                                   postgresql15 \
-                                   postgresql16 \
+                                postgresql14 \
+                                postgresql15 \
+                                postgresql16 \
     && dnf clean all
 
 RUN export PGSSLCIPHERS='TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256:scram-sha-256'
