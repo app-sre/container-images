@@ -1,6 +1,7 @@
 # Build an AppSRE FedRamp-centric container for debugging issues (see git clone below)
 
 # NOTE: postgres utils here are set to v14 by design
+#FROM registry.access.redhat.com/ubi8/ubi:8.8
 FROM registry.access.redhat.com/ubi8/ubi:8.8
 
 RUN dnf -y --refresh --security upgrade && \
@@ -24,7 +25,7 @@ RUN dnf -y config-manager --add-repo https://download.postgresql.org/pub/repos/y
     && dnf -y config-manager --add-repo https://download.postgresql.org/pub/repos/yum/16/redhat/rhel-8.8-x86_64 \
     && dnf update -y \
     && dnf repolist \
-    && dnf -y module enable postgresql:13 postgresql:14 postgresql:15 postgresql:16 \
+    #&& dnf -y module enable postgresql:13 postgresql:14 postgresql:15 postgresql:16 \
     && dnf -y --nogpgcheck install postgresql13 \ 
                                    postgresql14 \
                                    postgresql15 \
