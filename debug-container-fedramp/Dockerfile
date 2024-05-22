@@ -11,7 +11,7 @@ RUN dnf -y --refresh --security upgrade && \
         python3-psycopg2 \
         git \
         nmap \
-        bind-utils \
+        bind-utils \ 
         net-tools \
         rsync \
         skopeo \
@@ -24,7 +24,14 @@ RUN dnf -y config-manager --add-repo https://download.postgresql.org/pub/repos/y
     && dnf -y config-manager --add-repo https://download.postgresql.org/pub/repos/yum/16/redhat/rhel-8.8-x86_64 \
     && dnf update -y \
     && dnf repolist \
-    && dnf -y --nogpgcheck install postgresql13-13.15-1PGDG.rhel8.x86_64 postgresql14 postgresql15 postgresql16 \
+    && dnf -y --nogpgcheck --enablerepo=download.postgresql.org_pub_repos_yum_13_redhat_rhel-8.8-x86_64 \
+                           --enablerepo=download.postgresql.org_pub_repos_yum_14_redhat_rhel-8.8-x86_64 \
+                           --enablerepo=download.postgresql.org_pub_repos_yum_15_redhat_rhel-8.8-x86_64 \
+                           --enablerepo=download.postgresql.org_pub_repos_yum_16_redhat_rhel-8.8-x86_64 \
+                        install postgresql13 \ 
+                                postgresql14 \
+                                postgresql15 \
+                                postgresql16 \
     && dnf clean all
 
 RUN export PGSSLCIPHERS='TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256:scram-sha-256'
