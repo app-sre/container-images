@@ -121,10 +121,8 @@ function main() {
     log "Changed directories are: $changed"
 
     local docker_authd
-    if [[ "$origin" == "build" ]]; then
-        log "Login in $DOCKER_REGISTRY"
-        docker_authd=$(get_authenticated_docker_command) || return 1
-    fi
+    log "Login in $DOCKER_REGISTRY"
+    docker_authd=$(get_authenticated_docker_command) || return 1
 
     local rc=0
     for directory in $changed; do

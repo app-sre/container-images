@@ -1,12 +1,12 @@
 terraform {
   required_providers {
     dynatrace = {
-      version = "1.37.0"
+      version = "1.58.5"
       source  = "dynatrace-oss/dynatrace"
     }
 
     vault = {
-      version = "3.23.0"
+      version = "4.2.0"
     }
   }
 }
