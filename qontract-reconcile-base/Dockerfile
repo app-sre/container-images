@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/ubi:8.8 AS downloader
+FROM registry.access.redhat.com/ubi8/ubi:8.10 AS downloader
 
 RUN dnf -y install unzip glibc-langpack-en
 
@@ -55,11 +55,6 @@ RUN for version in ${TF_PROVIDER_CLOUDINIT_VERSIONS}; do \
     unzip /tmp/package-cloudinit-${version}.zip -d /tmp/terraform-providers/hashicorp/cloudinit/${version}/linux_amd64/; \
     done
 
-RUN dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
-    curl -sfL https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/CentOS_8/devel:kubic:libcontainers:stable.repo \
-    -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo && \
-    dnf install -y skopeo && \
-    dnf clean all
 
 RUN curl -sfL https://mirror.openshift.com/pub/openshift-v4/clients/ocp/${OC_VERSION}/openshift-client-linux.tar.gz \
     -o oc.tar.gz && \
@@ -93,7 +88,7 @@ RUN curl -sfL https://github.com/prometheus/alertmanager/releases/download/v${AL
     | tar -zxf - -C /usr/local/bin --strip-components=1 alertmanager-${ALERTMANAGER_VERSION}.linux-amd64/amtool
 
 
-FROM registry.access.redhat.com/ubi9/ubi-minimal:9.3
+FROM registry.access.redhat.com/ubi8/ubi-minimal:8.10
 
 ENV TF_PLUGIN_LOCAL_DIR=/usr/local/share/terraform/
 ENV TF_PLUGIN_CACHE_DIR=/.terraform.d/plugin-cache/
@@ -112,7 +107,6 @@ COPY --chown=0:0 --from=downloader \
     /usr/local/bin/git-secrets \
     /usr/local/bin/promtool \
     /usr/local/bin/amtool \
-    /usr/bin/skopeo \
     /usr/local/bin/
 
 RUN mkdir -p ${TF_PLUGIN_CACHE_DIR} && \
@@ -128,5 +122,4 @@ RUN mkdir -p ${TF_PLUGIN_CACHE_DIR} && \
         skopeo \
         findutils && \
     microdnf clean all && \
-    update-alternatives --install /usr/bin/python3 python /usr/bin/python3.11 1 && \
     python3 -m ensurepip
