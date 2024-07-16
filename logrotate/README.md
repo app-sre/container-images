@@ -11,7 +11,7 @@ The logrotate configuration file is expected to be mounted at `/etc/logrotate.d/
 Create a logrotate.conf file:
 
 ```bash
-oc create configmap logrotate-config --from-file=logrotate.conf
+oc create configmap logrotate-config --from-file=example-file
 ```
 
 Mount the configmap and the log files to be rotated in a cronJob or pod:

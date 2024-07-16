@@ -1,5 +1,6 @@
-# container-images
+# App-SRE Container Images
 
-Container images for app-sre projects. This is a the place for images that have no project associated or base images for app-sre projects.
+This repository contains container images for App-SRE projects. It serves as a place for images that are not associated with a specific project or for base images used by App-SRE projects.
 
-Every directory in this has the information to build a separate image. The [`build_images.sh`](build_deploy.sh) will be called when changes are pushed to master and will enter in every directory where the `VERSION` file has changed and will try to build and push every docker to `quay.io/app-sre/<directory name>`.
+Each directory in this repository contains the necessary information to build a separate image. 
+When changes are pushed to the `master` branch, the [`build_images.sh`](build_deploy.sh) script is triggered.
