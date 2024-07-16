@@ -30,7 +30,7 @@ spec:
           containers:
           - name: logrotate
             image: quay.io/app-sre/logrotate:latest
-            command: ["/usr/sbin/logrotate" ]
+            command: ["/sbin/logrotate" ]
             args: ["/etc/logrotate.d/example-file" ]
             volumeMounts:
             - name: logrotate-config
