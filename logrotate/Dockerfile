@@ -9,4 +9,4 @@ RUN mkdir -p /etc/logrotate.d
 
 # Default command to run logrotate
 # Meant to be overridden by the user
-CMD ["logrotate", "/etc/logrotate.d/logrotate.conf"]
+CMD ["logrotate", "/etc/logrotate.d/log_to_rotate"]

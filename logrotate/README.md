@@ -7,7 +7,7 @@ in a Kubernetes pod, or as a scheduled resource such as a cronJob.
 
 Two paths are mounted to the cronjob: the logging folder, and the log rotation config.
 
-The logrotate configuration file is expected to be mounted at `/etc/logrotate.conf`.
+The logrotate configuration file is expected to be mounted at `/etc/logrotate.d/`.
 Create a logrotate.conf file:
 
 ```bash
