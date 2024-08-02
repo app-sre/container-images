@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/ubi:8.10 AS downloader
+FROM registry.access.redhat.com/ubi9/ubi:9.4 AS downloader
 
 RUN dnf -y install unzip glibc-langpack-en
 
@@ -88,7 +88,7 @@ RUN curl -sfL https://github.com/prometheus/alertmanager/releases/download/v${AL
     | tar -zxf - -C /usr/local/bin --strip-components=1 alertmanager-${ALERTMANAGER_VERSION}.linux-amd64/amtool
 
 
-FROM registry.access.redhat.com/ubi8/ubi-minimal:8.10
+FROM registry.access.redhat.com/ubi9/ubi-minimal:9.4
 
 ENV TF_PLUGIN_LOCAL_DIR=/usr/local/share/terraform/
 ENV TF_PLUGIN_CACHE_DIR=/.terraform.d/plugin-cache/
@@ -122,4 +122,5 @@ RUN mkdir -p ${TF_PLUGIN_CACHE_DIR} && \
         skopeo \
         findutils && \
     microdnf clean all && \
+    update-alternatives --install /usr/bin/python3 python /usr/bin/python3.11 1 && \
     python3 -m ensurepip
