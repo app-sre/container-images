@@ -18,7 +18,7 @@ Both templates support several parameters; please see the templates for details.
 ## Postgres Example
 
 ```bash
-$ oc process --local -p POSTGRES_DB_SECRET_NAME=SECRET_NAME -f https://raw.githubusercontent.com/app-sre/container-images/debug-container-fedramp/master/openshift.yml  | oc apply -f -
+$ oc process --local -p POSTGRES_DB_SECRET_NAME=SECRET_NAME -f https://raw.githubusercontent.com/app-sre/container-images/master/debug-container-fedramp/openshift.yml  | oc apply -f -
 $ oc rsh <pod>
 $ psql -h <FQDN-of-db> -U postgres -d postgres -W
 pqsl>
@@ -27,7 +27,7 @@ pqsl>
 ## Redis Example
 
 ```bash
-$ oc process --local -p REDIS_SECRET_NAME=SECRET_NAME -f https://raw.githubusercontent.com/app-sre/container-images/debug-container-fedramp/master/openshift.yml  | oc apply -f -
+$ oc process --local -p REDIS_SECRET_NAME=SECRET_NAME -f https://raw.githubusercontent.com/app-sre/container-images/master/debug-container-fedramp/openshift.yml  | oc apply -f -
 $ oc rsh <pod>
 $ redis-cli -h $REDISCLI_HOST -p $REDISCLI_PORT --tls
 redis>
