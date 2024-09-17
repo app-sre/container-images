@@ -1,0 +1,19 @@
+config_diagnostics = 1
+openssl_config = openssl_init
+
+.include /etc/pki/tls/fips_local.cnf
+
+[openssl_init]
+providers = provider_sect
+alg_section = algorithm_sect
+
+[provider_sect]
+fips = fips_sect
+base = base-sect
+
+
+[base_sect]
+activate = 1
+
+[algorithm_sect]
+default_properties = fips=yes
