@@ -8,7 +8,8 @@ RUN rpm -i https://yum.vector.dev/stable/vector-0/x86_64/vector-${VECTOR_VERSION
 
 COPY openssl-fips.cnf .
 
-ENV OPENSSL_CONF=/opt/vector/openssl-fips.cnf
-ENV OPENSSL_MODULES=/usr/lib64/ossl-modules/
+# in order to properly use FIPS libraries you need to pass the following environment variables
+# OPENSSL_CONF=/opt/vector/openssl-fips.cnf
+# OPENSSL_MODULES=/usr/lib64/ossl-modules/
 
 ENTRYPOINT ["/usr/bin/vector"]
