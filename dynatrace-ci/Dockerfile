@@ -6,7 +6,7 @@ FROM ${TERRAFORM_REPO}:${TERRAFORM_VERSION} as terraform
 COPY providers.tf .
 RUN terraform providers mirror -platform=linux_amd64 /plugins
 
-FROM registry.access.redhat.com/ubi9/ubi-minimal:9.2
+FROM registry.access.redhat.com/ubi9/ubi-minimal:9.4
 
 WORKDIR /terraform
 
