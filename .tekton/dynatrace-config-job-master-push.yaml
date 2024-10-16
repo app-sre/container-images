@@ -24,9 +24,9 @@ spec:
   - name: output-image
     value: quay.io/redhat-user-workloads/app-sre-tenant/container-images-master/dynatrace-config-job-master:{{revision}}
   - name: dockerfile
-    value: Dockerfile
+    value: dynatrace-config-job/Dockerfile
   - name: path-context
-    value: .
+    value: dynatrace-config-job/
   pipelineRef:
     resolver: git
     params:
