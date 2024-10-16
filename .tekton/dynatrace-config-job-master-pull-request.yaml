@@ -30,8 +30,6 @@ spec:
     value: dynatrace-config-job/Dockerfile
   - name: path-context
     value: dynatrace-config-job/
-  - name: version-file-path
-    value: dynatrace-config-job/VERSION
   pipelineRef:
     resolver: git
     params:
