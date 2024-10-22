@@ -9,7 +9,7 @@ RUN git clone \
 # RUN go get -d -v
 RUN CGO_ENABLED=0 GOOS=linux go build -o cloudflare_exporter .
 
-FROM registry.access.redhat.com/ubi8-minimal:8.5
+FROM registry.access.redhat.com/ubi8-minimal:8.10-1086
 RUN microdnf update -y \
     && rm -rf /var/cache/yum \
     && microdnf install ca-certificates
