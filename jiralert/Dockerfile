@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/go-toolset:1.20.12 as builder
+FROM registry.access.redhat.com/ubi8/go-toolset:1.20.12@sha256:43cf2468d9ebecbdf69503ca9cfb4a7c58ee86c94b64fb024c8aebd1bedc816e as builder
 ENV GOPATH=/go/
 ENV GO111MODULE=on
 USER root
@@ -9,7 +9,7 @@ RUN git checkout d43cbab62126d543e8e789f6374d9e745693cce2
 # run just build and skip all other steps because the linter needs to much memory
 RUN make build
 
-FROM registry.access.redhat.com/ubi8-minimal:8.9
+FROM registry.access.redhat.com/ubi8-minimal:8.9@sha256:2fa47fa9df7b98e2776f447855699c01d06c3271b2d7259b8b314084580cf591
 RUN microdnf update -y \
     && rm -rf /var/cache/yum \
     && microdnf install ca-certificates
