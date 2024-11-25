@@ -16,6 +16,7 @@ DOCKER_ORG=${DOCKER_ORG:-app-sre}
 SET_X=${SET_X:-}
 [[ -n "$SET_X" ]] && set -x
 PREVIOUS_BUILD_SHA_FILE=./PREVIOUS_BUILD_SHA
+CI_EXT_EXCLUDED_IMAGES_FILE=./CI_EXT_EXCLUDED_IMAGES
 
 # This could be defined inside get_authenticated_docker_command
 # but some bash interpreters were executing this on function exit
@@ -122,6 +123,14 @@ function main() {
         log "No VERSION files changed. Exiting"
         return 0
     fi
+
+    for image in $changed; do
+        directory=$(basename $image)
+        if grep -q "^$directory$" $CI_EXT_EXCLUDED_IMAGES_FILE; then
+            log "$directory won't be built. It is explictly excluded."
+            return 0
+        fi
+    done
 
     log "Changed directories are: $changed"
 
