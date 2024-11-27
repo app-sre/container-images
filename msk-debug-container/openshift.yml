@@ -1,0 +1,86 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: msk-debug-container
+objects:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      ignore-check.kube-linter.io/minimum-three-replicas: "skip"
+    labels:
+      app: msk-debug-container
+    name: msk-debug-container
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 2
+    selector:
+      matchLabels:
+        app: msk-debug-container
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 0
+        maxSurge: 1
+    template:
+      metadata:
+        labels:
+          app: msk-debug-container
+      spec:
+        containers:
+        - image: ${IMAGE}:${MSK_VERSION}
+          name: msk-debug-container
+          command: ["sleep"]
+          args: ["infinity"]
+          resources:
+            limits:
+              cpu: ${{CPU_LIMIT}}
+              memory: ${{MEMORY_LIMIT}}
+            requests:
+              cpu: ${{CPU_REQUEST}}
+              memory: ${{MEMORY_REQUEST}}
+          env:
+          - name: MSK_BOOTSTRAP_SERVERS
+            valueFrom:
+              secretKeyRef:
+                name: ${{MSK_SECRET_NAME}}
+                key: "bootstrap_brokers_sasl_scram"
+          - name: MSK_ZOOKEEPER
+            valueFrom:
+              secretKeyRef:
+                name: ${{MSK_SECRET_NAME}}
+                key: "zookeeper_connect_string_tls"
+          - name: MSK_USER
+            valueFrom:
+              secretKeyRef:
+                name: ${{MSK_CREDENTIALS_SECRET_NAME}}
+                key: "username"
+          - name: MSK_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: ${{MSK_CREDENTIALS_SECRET_NAME}}
+                key: "password"
+
+parameters:
+- name: IMAGE
+  value: quay.io/redhat-services-prod/app-sre-tenant/container-images-master/msk-debug-container-master
+- name: MSK_VERSION
+  required: true
+- name: MSK_SECRET_NAME
+  required: true
+  description: The name of the secret containing the MSK connection information
+- name: MSK_CREDENTIALS_SECRET_NAME
+  required: true
+  description: The name of the secret containing the MSK user credentials
+- name: CPU_REQUEST
+  value: "100m"
+  required: true
+- name: CPU_LIMIT
+  value: "1000m"
+  required: true
+- name: MEMORY_REQUEST
+  value: "128Mi"
+  required: true
+- name: MEMORY_LIMIT
+  value: "4Gi"
+  required: true

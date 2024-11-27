@@ -1,0 +1,59 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  annotations:
+    build.appstudio.openshift.io/repo: https://github.com/app-sre/container-images?rev={{revision}}
+    build.appstudio.redhat.com/commit_sha: '{{revision}}'
+    build.appstudio.redhat.com/target_branch: '{{target_branch}}'
+    pipelinesascode.tekton.dev/max-keep-runs: "25"
+    pipelinesascode.tekton.dev/on-cel-expression: event == "push" && target_branch
+      == "master" && files.all.exists(x, x.matches('msk-debug-container/|.tekton/msk-debug-container-master-pull-request.yaml|.tekton/msk-debug-container-master-push.yaml'))
+  creationTimestamp: null
+  labels:
+    appstudio.openshift.io/application: container-images-master
+    appstudio.openshift.io/component: msk-debug-container-master
+    pipelines.appstudio.openshift.io/type: build
+  name: msk-debug-container-3.6-master-on-push
+  namespace: app-sre-tenant
+spec:
+  params:
+  - name: git-url
+    value: '{{source_url}}'
+  - name: revision
+    value: '{{revision}}'
+  - name: output-image
+    value: quay.io/redhat-user-workloads/app-sre-tenant/container-images-master/msk-debug-container-master:{{revision}}
+  - name: dockerfile
+    value: msk-debug-container/Dockerfile
+  - name: path-context
+    value: msk-debug-container/
+  - name: build-args
+    value:
+    - KAFKA_VERSION=3.6
+    - KAFKA_VERSION_PATCH=2
+  pipelineRef:
+    resolver: git
+    params:
+    - name: url
+      value: https://github.com/app-sre/shared-pipelines
+    - name: revision
+      value: main
+    - name: pathInRepo
+      value: pipelines/multi-arch-build-pipeline.yaml
+  taskRunTemplate: {}
+  workspaces:
+  - name: workspace
+    volumeClaimTemplate:
+      metadata:
+        creationTimestamp: null
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+      status: {}
+  - name: git-auth
+    secret:
+      secretName: '{{ git_auth_secret }}'
+status: {}
