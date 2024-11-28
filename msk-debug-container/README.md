@@ -39,9 +39,7 @@ oc rsh deployment/msk-debug-container
 The container provides all Kafka tools, such as `kafka-console-consumer`, `kafka-console-producer`, and `kafka-topics`. For example:
 
 ```bash
-$ kafka-topics.sh --bootstrap-server $MSK_BOOTSTRAP_SERVERS --command-config $MSK_CONFIG --list
-
-afafaf
+kafka-topics.sh --bootstrap-server $MSK_BOOTSTRAP_SERVERS --command-config $MSK_CONFIG --list
 ```
 
 > **Note**

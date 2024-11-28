@@ -8,7 +8,7 @@ metadata:
     build.appstudio.redhat.com/target_branch: '{{target_branch}}'
     pipelinesascode.tekton.dev/max-keep-runs: "10"
     pipelinesascode.tekton.dev/on-cel-expression: event == "pull_request" && target_branch
-      == "master" && files.all.exists(x, x.matches('msk-debug-container/|.tekton/msk-debug-container-master-pull-request.yaml|.tekton/msk-debug-container-master-push.yaml'))
+      == "master" && files.all.exists(x, x.matches('msk-debug-container/|.tekton/msk-debug-container-kafka-3.6-master-pull-request.yaml|.tekton/msk-debug-container-kafka-3.6-master-push.yaml|.tekton/msk-debug-container-kafka-3.7-master-pull-request.yaml|.tekton/msk-debug-container-kafka-3.7-master-push.yaml'))
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: container-images-master
@@ -23,7 +23,7 @@ spec:
   - name: revision
     value: '{{revision}}'
   - name: output-image
-    value: quay.io/redhat-user-workloads/app-sre-tenant/container-images-master/msk-debug-container-master:on-pr-{{revision}}
+    value: quay.io/redhat-user-workloads/app-sre-tenant/container-images-master/msk-debug-container-master:on-pr-3.6-{{revision}}
   - name: image-expires-after
     value: 5d
   - name: dockerfile

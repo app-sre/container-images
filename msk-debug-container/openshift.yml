@@ -8,6 +8,7 @@ objects:
   metadata:
     annotations:
       ignore-check.kube-linter.io/minimum-three-replicas: "skip"
+      ignore-check.kube-linter.io/unset-cpu-requirements: "skip"
     labels:
       app: msk-debug-container
     name: msk-debug-container
@@ -31,11 +32,8 @@ objects:
         - image: ${IMAGE}:${MSK_VERSION}
           imagePullPolicy: Always
           name: msk-debug-container
-          command: ["sleep"]
-          args: ["infinity"]
           resources:
             limits:
-              cpu: ${{CPU_LIMIT}}
               memory: ${{MEMORY_LIMIT}}
             requests:
               cpu: ${{CPU_REQUEST}}
@@ -75,9 +73,6 @@ parameters:
   description: The name of the secret containing the MSK user credentials
 - name: CPU_REQUEST
   value: "100m"
-  required: true
-- name: CPU_LIMIT
-  value: "1000m"
   required: true
 - name: MEMORY_REQUEST
   value: "128Mi"

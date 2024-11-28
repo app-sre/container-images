@@ -7,7 +7,7 @@ metadata:
     build.appstudio.redhat.com/target_branch: '{{target_branch}}'
     pipelinesascode.tekton.dev/max-keep-runs: "25"
     pipelinesascode.tekton.dev/on-cel-expression: event == "push" && target_branch
-      == "master" && files.all.exists(x, x.matches('msk-debug-container/|.tekton/msk-debug-container-master-pull-request.yaml|.tekton/msk-debug-container-master-push.yaml'))
+      == "master" && files.all.exists(x, x.matches('msk-debug-container/|.tekton/msk-debug-container-kafka-3.6-master-pull-request.yaml|.tekton/msk-debug-container-kafka-3.6-master-push.yaml|.tekton/msk-debug-container-kafka-3.7-master-pull-request.yaml|.tekton/msk-debug-container-kafka-3.7-master-push.yaml'))
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: container-images-master
@@ -22,7 +22,7 @@ spec:
   - name: revision
     value: '{{revision}}'
   - name: output-image
-    value: quay.io/redhat-user-workloads/app-sre-tenant/container-images-master/msk-debug-container-master:{{revision}}
+    value: quay.io/redhat-user-workloads/app-sre-tenant/container-images-master/msk-debug-container-master:3.7-{{revision}}
   - name: dockerfile
     value: msk-debug-container/Dockerfile
   - name: path-context
