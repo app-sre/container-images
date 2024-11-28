@@ -12,26 +12,36 @@ The template requires the following parameters:
 
 The container supports the following environment variables:
 
+- `MSK_CONFIG`: Path to the Kafka client configuration file. Default: `/client.properties`.
 - `MSK_BOOTSTRAP_SERVERS`: The Kafka bootstrap servers.
 - `MSK_ZOOKEEPER_CONNECT`: The Zookeeper connection string.
 - `MSK_USER`: The Kafka user.
 - `MSK_PASSWORD`: The Kafka password.
-
-And has `/client.properties` configuration file with all required properties for the Kafka clients.
 
 ## Usage
 
 Use the following commands to deploy the container:
 
 ```bash
+# Login to the cluster and select the namespace
 oc login ...
 oc project <namespace>
+# Deploy the container
 oc process --local \
   -p MSK_VERSION=<MSK_VERSION> \
   -p MSK_SECRET_NAME=<MSK_SECRET_NAME> \
   -p MSK_CREDENTIALS_SECRET_NAME=<MSK_CREDENTIALS_SECRET_NAME> \
   -f https://raw.githubusercontent.com/app-sre/container-images/master/msk-debug-container/openshift.yml | oc apply -f -
+# Connect to the pod
 oc rsh deployment/msk-debug-container
+```
+
+The container provides all Kafka tools, such as `kafka-console-consumer`, `kafka-console-producer`, and `kafka-topics`. For example:
+
+```bash
+$ kafka-topics.sh --bootstrap-server $MSK_BOOTSTRAP_SERVERS --command-config $MSK_CONFIG --list
+
+afafaf
 ```
 
 > **Note**

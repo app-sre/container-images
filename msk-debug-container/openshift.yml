@@ -29,6 +29,7 @@ objects:
       spec:
         containers:
         - image: ${IMAGE}:${MSK_VERSION}
+          imagePullPolicy: Always
           name: msk-debug-container
           command: ["sleep"]
           args: ["infinity"]
