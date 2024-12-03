@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/go-toolset:1.20.12 as builder
+FROM registry.access.redhat.com/ubi8/go-toolset:1.22.7-5.1732646420@sha256:64917b531ab4f2996c340aeb74e1f3551221cc779ceb3c6cfcefef0463914777 as builder
 ENV GOPATH=/go/
 ENV GO111MODULE=on
 USER root
