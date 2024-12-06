@@ -2,7 +2,7 @@
 
 # NOTE: postgres utils here are set to v14 by design
 #FROM registry.access.redhat.com/ubi8/ubi:8.8
-FROM registry.access.redhat.com/ubi8/ubi:8.10
+FROM registry.access.redhat.com/ubi8/ubi:8.10-1132.1732635159@sha256:79d46e7029c2b13a713b2089650fd235aadb3e6e449c79f6741d6c9381ab41a1
 
 RUN dnf -y --refresh --security upgrade && \
     dnf -y install dnf-utils \
