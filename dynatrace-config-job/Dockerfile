@@ -4,6 +4,10 @@ FROM registry.access.redhat.com/ubi9/ubi-minimal:9.5-1731593028
 # Set your image version here
 LABEL konflux.additional-tags="2.11"
 
+COPY LICENSE /licenses/LICENSE
+
 RUN microdnf install jq-1.6 -y &&\
     microdnf clean all 
+
+USER ${USER}
 
