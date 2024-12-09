@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9/ubi:9.5@sha256:2bae9062eddbbc18e76555972e7026ffe02cef560a0076e6d7f72bed2c05723f AS downloader
+FROM registry.access.redhat.com/ubi9/ubi:9.5@sha256:1057dab827c782abcfb9bda0c3900c0966b5066e671d54976a7bcb3a2d1a5e53 AS downloader
 
 RUN dnf -y install unzip glibc-langpack-en
 
@@ -88,7 +88,7 @@ RUN curl -sfL https://github.com/prometheus/alertmanager/releases/download/v${AL
     | tar -zxf - -C /usr/local/bin --strip-components=1 alertmanager-${ALERTMANAGER_VERSION}.linux-amd64/amtool
 
 
-FROM registry.access.redhat.com/ubi9/ubi-minimal:9.5@sha256:d85040b6e3ed3628a89683f51a38c709185efc3fb552db2ad1b9180f2a6c38be
+FROM registry.access.redhat.com/ubi9/ubi-minimal:9.5@sha256:dee813b83663d420eb108983a1c94c614ff5d3fcb5159a7bd0324f0edbe7fca1
 
 ENV TF_PLUGIN_LOCAL_DIR=/usr/local/share/terraform/
 ENV TF_PLUGIN_CACHE_DIR=/.terraform.d/plugin-cache/
