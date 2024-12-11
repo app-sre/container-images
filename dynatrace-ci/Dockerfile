@@ -10,7 +10,8 @@ FROM registry.access.redhat.com/ubi9/ubi-minimal:9.2
 
 WORKDIR /terraform
 
-RUN microdnf -y install diffutils &&\
+# We need git to fetch tf modules from git source
+RUN microdnf -y install diffutils  git &&\
     microdnf clean all
 
 COPY --chown=0:0 --from=terraform /bin/terraform /usr/local/bin/
