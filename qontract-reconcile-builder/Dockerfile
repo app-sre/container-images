@@ -1,4 +1,4 @@
-FROM quay.io/app-sre/qontract-reconcile-base:0.14.0 as base
+FROM quay.io/app-sre/qontract-reconcile-base:0.14.0@sha256:bd6f0de349fab0cce58ba9e5b0f01296688f26038b1ac3730b04eb8c270e255c as base
 
 WORKDIR /work
 
