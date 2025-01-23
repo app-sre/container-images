@@ -2,7 +2,7 @@ FROM registry.access.redhat.com/ubi9/ubi:9.3
 
 WORKDIR /work
 
-ENV OC_VERSIONS="4.10.15 4.12.46 4.17.1"
+ENV OC_VERSIONS="4.10.15 4.12.46 4.16.2"
 
 RUN for version in ${OC_VERSIONS}; do \
     mkdir ${version}; \
