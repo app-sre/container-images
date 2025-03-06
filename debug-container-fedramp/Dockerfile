@@ -1,10 +1,10 @@
 # Build an AppSRE FedRamp-centric container for debugging issues (see git clone below)
 
 # NOTE: postgres utils here are set to v14 by design
-#FROM registry.access.redhat.com/ubi8/ubi:8.8
 FROM registry.access.redhat.com/ubi8/ubi:8.10
 
 RUN dnf -y --refresh --security upgrade && \
+    dnf config-manager --set-enabled ubi-8-baseos-rpms ubi-8-codeready-builder-rpms ubi-8-appstream-rpms && \
     dnf -y install dnf-utils \
         dracut \
         python3-pip \
@@ -17,8 +17,9 @@ RUN dnf -y --refresh --security upgrade && \
         rsync \
         skopeo \
         iputils \
-        alternatives 
-    
+        alternatives \
+        perf
+
 RUN dnf -y config-manager --add-repo https://download.postgresql.org/pub/repos/yum/13/redhat/rhel-8.8-x86_64 \
     && dnf -y config-manager --add-repo https://download.postgresql.org/pub/repos/yum/14/redhat/rhel-8.8-x86_64 \
     && dnf -y config-manager --add-repo https://download.postgresql.org/pub/repos/yum/15/redhat/rhel-8.8-x86_64 \
@@ -26,7 +27,7 @@ RUN dnf -y config-manager --add-repo https://download.postgresql.org/pub/repos/y
     && dnf update -y \
     && dnf repolist \
     && dnf -y module disable postgresql
-    #&& dnf -y module enable postgresql:13 postgresql:14 postgresql:15 postgresql:16 \
+
 RUN dnf -y --nogpgcheck install postgresql13 \ 
                                 postgresql14 \
                                 postgresql15 \
@@ -44,8 +45,6 @@ RUN alternatives --install /usr/bin/psql psql /usr/pgsql-13/bin/psql 130 && \
 
 RUN chmod -R 775 /var/lib/alternatives/ 
 RUN chmod -R 775 /etc/alternatives/ 
-
-RUN git clone --depth 1 https://github.com/brendangregg/perf-tools
 
 RUN pip3 install awscli redis
 
