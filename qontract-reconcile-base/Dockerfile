@@ -93,8 +93,6 @@ FROM registry.access.redhat.com/ubi9/ubi-minimal:9.5@sha256:8b314e254e9ab9a7a08b
 ENV TF_PLUGIN_LOCAL_DIR=/usr/local/share/terraform/
 ENV TF_PLUGIN_CACHE_DIR=/.terraform.d/plugin-cache/
 
-RUN test -f /etc/localtime || ln -sf /usr/share/zoneinfo/Etc/UTC /etc/localtime
-
 # Terraform providers
 COPY --chown=0:0 --from=downloader \
     /tmp/terraform-providers/ \
@@ -123,6 +121,11 @@ RUN mkdir -p ${TF_PLUGIN_CACHE_DIR} && \
         python3.11 \
         skopeo \
         findutils && \
+    microdnf update tzdata -y && \
+    microdnf reinstall tzdata -y && \
     microdnf clean all && \
     update-alternatives --install /usr/bin/python3 python /usr/bin/python3.11 1 && \
     python3 -m ensurepip
+
+RUN test -f /etc/localtime || ln -s /usr/share/zoneinfo/UTC /etc/localtime
+ENV TZ=UTC
