@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9/ubi:9.5@sha256:e3b585af6e350e1e0297491bbf190adfbcd5ff9343373f00c06158c2e2c21f61 AS downloader
+FROM registry.access.redhat.com/ubi9/ubi:9.5@sha256:6db9bfa8c17ca247dcd53970df5f4e90fa423d6deaaa7096e48aba986de906e8 AS downloader
 
 RUN dnf -y install unzip glibc-langpack-en
 
