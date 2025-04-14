@@ -11,6 +11,8 @@ ENV \
 
 
 RUN microdnf install -y dnf 
+
+
 RUN dnf -y --refresh --security upgrade && \
     dnf -y install \
         alternatives \
@@ -32,6 +34,8 @@ RUN dnf -y --refresh --security upgrade && \
         tar \
     && dnf clean all
 
+#requires dnf-utils to be present
+RUN dnf config-manager --set-enabled ubi-9-baseos-rpms ubi-9-codeready-builder-rpms ubi-9-appstream-rpms    
 
 # Install FedRamp specific version number (see AppSRE-FT3)
 ENV OCP_VERSION=4.14.45
@@ -41,6 +45,7 @@ RUN curl -LO ${OCP_URL} && \
     mv oc kubectl /usr/local/bin/ && \
     chmod +x /usr/local/bin/oc /usr/local/bin/kubectl && \
     rm -f 
+
 
 
 # anything normally installed via pip would go here (see: https://docs.astral.sh/uv/guides/integration/docker/#using-the-pip-interface)
