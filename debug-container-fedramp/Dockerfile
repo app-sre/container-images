@@ -1,5 +1,5 @@
 
-# Build an AppSRE FedRamp-centric container for debugging issues (see git clone below)
+# Build a FedRamp-centric (appsre-ft3) container for debugging issues 
 FROM quay.io/app-sre/ubi9-ubi-minimal@sha256:94b434a29a894129301f6ff52dbddb19422fc800a109170c634b056da8cd704f
 COPY --from=ghcr.io/astral-sh/uv:0.6.14@sha256:3362a526af7eca2fcd8604e6a07e873fb6e4286d8837cb753503558ce1213664 /uv /bin/uv
 
@@ -10,9 +10,10 @@ ENV \
     UV_NO_CACHE=true 
 
 
+# dnf required for greater package index and security advisories
 RUN microdnf install -y dnf 
 
-
+#force a refresh of dnf but only auto-apply security upgrades
 RUN dnf -y --refresh --security upgrade && \
     dnf -y install \
         alternatives \
@@ -51,7 +52,7 @@ RUN curl -LO ${OCP_URL} && \
 # anything normally installed via pip would go here (see: https://docs.astral.sh/uv/guides/integration/docker/#using-the-pip-interface)
 RUN uv pip install --system awscli redis psycopg PyMySQL
 
-   
+# add repos to install multiple versions of psql
 RUN dnf -y config-manager --add-repo https://download.postgresql.org/pub/repos/yum/13/redhat/rhel-9.2-x86_64 \
  && dnf -y config-manager --add-repo https://download.postgresql.org/pub/repos/yum/14/redhat/rhel-9.2-x86_64 \
  && dnf -y config-manager --add-repo https://download.postgresql.org/pub/repos/yum/15/redhat/rhel-9.2-x86_64 \
@@ -59,7 +60,7 @@ RUN dnf -y config-manager --add-repo https://download.postgresql.org/pub/repos/y
  && dnf update -y 
 
  
-
+# install multiple versions of psql
 RUN dnf -y --nogpgcheck install postgresql13 \ 
                                 postgresql14 \
                                 postgresql15 \
@@ -71,11 +72,13 @@ RUN export PGSSLCIPHERS='TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS
 RUN export OPENSSL_FIPS=1
 
 
+# FedRamp requires the ability to connect to multiple versions of Postgresql
+# the alternatives program allows a seamless switching between them
 RUN alternatives --install /usr/bin/psql psql /usr/pgsql-13/bin/psql 130 && \
     alternatives --install /usr/bin/psql psql /usr/pgsql-14/bin/psql 140 && \
     alternatives --install /usr/bin/psql psql /usr/pgsql-15/bin/psql 150 && \
     alternatives --install /usr/bin/psql psql /usr/pgsql-16/bin/psql 160 && \
-    alternatives --install /usr/bin/psql psql /usr/pgsql-16/bin/psql 170 
+    alternatives --install /usr/bin/psql psql /usr/pgsql-17/bin/psql 170 
 
 RUN chmod -R 775 /var/lib/alternatives/ 
 RUN chmod -R 775 /etc/alternatives/ 
