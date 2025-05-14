@@ -28,6 +28,8 @@ RUN terraform providers mirror -platform=linux_amd64 /plugins
 # We want to be able to pull tf modules from internal repos
 FROM quay.io/app-sre/internal-redhat-ca:0.3.0 as prod
 
+COPY LICENSE /licenses/LICENSE
+
 WORKDIR /terraform
 
 # We need git to fetch tf modules from git source
