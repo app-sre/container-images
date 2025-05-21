@@ -26,15 +26,14 @@ COPY providers.tf .
 RUN terraform providers mirror -platform=linux_amd64 /plugins
 
 # We want to be able to pull tf modules from internal repos
-FROM quay.io/app-sre/internal-redhat-ca:0.3.0 as prod
-
-COPY LICENSE /licenses/LICENSE
+FROM quay.io/redhat-services-prod/app-sre-tenant/container-images-int-master/internal-redhat-ca-master:0.5.0-1 AS prod
 
 WORKDIR /terraform
 
 # We need git to fetch tf modules from git source
-RUN microdnf -y install diffutils  git &&\
+RUN microdnf -y install jq diffutils  git &&\
     microdnf clean all
+
 COPY entrypoint.sh /usr/local/bin/
 COPY --chown=0:0 --from=terraform /usr/local/bin/terraform /usr/local/bin/
 COPY --chown=0:0 --from=terraform /plugins/ /plugins/
