@@ -26,15 +26,29 @@ COPY providers.tf .
 RUN terraform providers mirror -platform=linux_amd64 /plugins
 
 # We want to be able to pull tf modules from internal repos
-FROM quay.io/app-sre/internal-redhat-ca:0.3.0 as prod
+FROM registry.access.redhat.com/ubi9/ubi-minimal:9.4 AS internal-CA-builder
+
+ENV INTERNAL_CA_FILENAME="redhat-internal-cert-install-0.1-31.el7.noarch.rpm"
+ENV INTERNAL_CA_URL="http://hdn.corp.redhat.com/rhel8-csb/RPMS/noarch/"$INTERNAL_CA_FILENAME
+
+RUN microdnf install -y wget java-headless chkconfig && \
+    wget $INTERNAL_CA_URL && \
+    rpm -i $INTERNAL_CA_FILENAME
+
+FROM registry.access.redhat.com/ubi9/ubi-minimal:9.4
+
+LABEL konflux.additional-tags="0.5.0"
 
 COPY LICENSE /licenses/LICENSE
+
+COPY --from=internal-CA-builder /etc/pki/ /etc/pki/
 
 WORKDIR /terraform
 
 # We need git to fetch tf modules from git source
-RUN microdnf -y install diffutils  git &&\
+RUN microdnf -y install jq diffutils  git &&\
     microdnf clean all
+
 COPY entrypoint.sh /usr/local/bin/
 COPY --chown=0:0 --from=terraform /usr/local/bin/terraform /usr/local/bin/
 COPY --chown=0:0 --from=terraform /plugins/ /plugins/
