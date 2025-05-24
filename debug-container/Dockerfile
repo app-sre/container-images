@@ -1,6 +1,6 @@
 # Locking this to a specific Fedora version for now. New releases of Postgresql, and Fedora versions going out of
 # support will drive this upgrade every 6-12 months.
-FROM quay.io/fedora/fedora:43@sha256:6949fc1c927bc4a9bf6ab81a995ac0f0f3bc69cdeeab2c90c42fb2b2906976ba
+FROM quay.io/fedora/fedora:43@sha256:23857adf3ec05a65c6bf6801905641dd024004a25a90c9eeceab785e65811768
 
 RUN dnf -y update && \
     dnf -y install \
