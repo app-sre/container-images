@@ -1,16 +1,41 @@
-FROM registry.redhat.io/rhel9/grafana@sha256:079d6b4e15746dd6b070430bb15a210ff73c5b2e73a2a68480a005ac44e450b7
+ARG GF_VERSION="10.4.1"
 
-ENV GF_VERSION="10.4.1"
+FROM grafana/grafana:$GF_VERSION AS upstream
+
+FROM registry.access.redhat.com/ubi9-minimal@sha256:92b1d5747a93608b6adb64dfd54515c3c5a360802db4706765ff3d8470df6290 AS base
+
+ARG GF_VERSION
 
 USER root
 
-RUN dnf install -y wget
+COPY --from=upstream /usr/share/grafana/ /usr/share/grafana/
 
-RUN wget -q -O grafana.key https://rpm.grafana.com/gpg.key && rpm --import grafana.key && \
-    dnf config-manager --add-repo https://rpm.grafana.com && rm grafana.key
+RUN mkdir /etc/grafana /var/lib/grafana /var/log/grafana && \
+    useradd -u 1001 -g 0 -r -d /usr/share/grafana -s /sbin/nologin grafana && \
+    microdnf install -y wget && microdnf upgrade -y && microdnf clean all && \
+    chgrp -R 0 /etc/grafana /var/lib/grafana /var/log/grafana /usr/share/grafana && \
+    chmod -R g=u /var/lib/grafana /var/log/grafana /usr/share/grafana
 
-RUN dnf install -y grafana-${GF_VERSION}
+RUN wget https://raw.githubusercontent.com/grafana/grafana/refs/tags/v${GF_VERSION}/packaging/docker/run.sh -O usr/bin/run-grafana && chmod +x /usr/bin/run-grafana
+
+VOLUME ["/etc/grafana"]
+VOLUME ["/etc/grafana/provisioning/datasources"]
+VOLUME ["/etc/grafana/provisioning/dashboards"]
+VOLUME ["/etc/grafana/provisioning/notifiers"]
+
+VOLUME ["/grafana-dashboard-definitions"]
+
+EXPOSE 3000
 
 USER 1001
 WORKDIR /usr/share/grafana
+
+ENV PATH="/usr/share/grafana/bin:$PATH" \
+  GF_PATHS_CONFIG="/etc/grafana/grafana.ini" \
+  GF_PATHS_DATA="/var/lib/grafana" \
+  GF_PATHS_HOME="/usr/share/grafana" \
+  GF_PATHS_LOGS="/var/log/grafana" \
+  GF_PATHS_PLUGINS="/var/lib/grafana/plugins" \
+  GF_PATHS_PROVISIONING="/etc/grafana/provisioning"
+
 ENTRYPOINT ["/usr/bin/run-grafana"]
