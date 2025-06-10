@@ -1,0 +1,56 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  annotations:
+    build.appstudio.openshift.io/repo: https://github.com/app-sre/container-images?rev={{revision}}
+    build.appstudio.redhat.com/commit_sha: '{{revision}}'
+    build.appstudio.redhat.com/target_branch: '{{target_branch}}'
+    pipelinesascode.tekton.dev/max-keep-runs: "25"
+    pipelinesascode.tekton.dev/on-cel-expression: event == "push" && target_branch
+      == "master" && files.all.exists(x, x.matches('grafana-ubi9/|.tekton/grafana-ubi9-master-pull-request.yaml|.tekton/grafana-ubi9-master-push.yaml'))
+  creationTimestamp: null
+  labels:
+    appstudio.openshift.io/application: container-images-master
+    appstudio.openshift.io/component: grafana-ubi9-master
+    pipelines.appstudio.openshift.io/type: build
+  name: grafana-ubi9-master-on-push
+  namespace: app-sre-tenant
+spec:
+  params:
+  - name: git-url
+    value: '{{source_url}}'
+  - name: revision
+    value: '{{revision}}'
+  - name: output-image
+    value: quay.io/redhat-user-workloads/app-sre-tenant/container-images-master/grafana-ubi9-master:{{revision}}
+  - name: dockerfile
+    value: grafana-ubi9/Dockerfile
+  - name: path-context
+    value: grafana-ubi9/
+  pipelineRef:
+    params:
+    - name: url
+      value: https://github.com/app-sre/shared-pipelines
+    - name: revision
+      value: main
+    - name: pathInRepo
+      value: pipelines/multi-arch-build-pipeline.yaml
+    resolver: git
+  taskRunTemplate:
+    serviceAccountName: build-pipeline-grafana-ubi9-master
+  workspaces:
+  - name: workspace
+    volumeClaimTemplate:
+      metadata:
+        creationTimestamp: null
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+      status: {}
+  - name: git-auth
+    secret:
+      secretName: '{{ git_auth_secret }}'
+status: {}
