@@ -1,14 +1,19 @@
 ARG GF_VERSION="10.4.1"
 
-FROM grafana/grafana:$GF_VERSION AS upstream
+FROM registry.access.redhat.com/ubi9-minimal@sha256:92b1d5747a93608b6adb64dfd54515c3c5a360802db4706765ff3d8470df6290 AS downloader
+
+ARG GF_VERSION
+
+RUN microdnf install -y tar gzip wget && mkdir /tmp/grafana-install && \
+    wget -O /tmp/grafana.tar.gz https://dl.grafana.com/oss/release/grafana-${GF_VERSION}.linux-amd64.tar.gz && \
+    tar -zxvf /tmp/grafana.tar.gz --directory=/tmp/grafana-install
 
 FROM registry.access.redhat.com/ubi9-minimal@sha256:92b1d5747a93608b6adb64dfd54515c3c5a360802db4706765ff3d8470df6290 AS base
 
 ARG GF_VERSION
-
 USER root
 
-COPY --from=upstream /usr/share/grafana/ /usr/share/grafana/
+COPY --from=downloader /tmp/grafana-install/grafana-v${GF_VERSION} /usr/share/grafana/
 
 RUN mkdir /etc/grafana /var/lib/grafana /var/log/grafana && \
     useradd -u 1001 -g 0 -r -d /usr/share/grafana -s /sbin/nologin grafana && \
