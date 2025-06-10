@@ -27,8 +27,9 @@ VOLUME ["/etc/grafana"]
 VOLUME ["/etc/grafana/provisioning/datasources"]
 VOLUME ["/etc/grafana/provisioning/dashboards"]
 VOLUME ["/etc/grafana/provisioning/notifiers"]
-
 VOLUME ["/grafana-dashboard-definitions"]
+
+COPY LICENSE /licenses/LICENSE
 
 EXPOSE 3000
 
