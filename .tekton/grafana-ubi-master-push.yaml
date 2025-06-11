@@ -4,17 +4,16 @@ metadata:
   annotations:
     build.appstudio.openshift.io/repo: https://github.com/app-sre/container-images?rev={{revision}}
     build.appstudio.redhat.com/commit_sha: '{{revision}}'
-    build.appstudio.redhat.com/pull_request_number: '{{pull_request_number}}'
     build.appstudio.redhat.com/target_branch: '{{target_branch}}'
-    pipelinesascode.tekton.dev/max-keep-runs: "10"
-    pipelinesascode.tekton.dev/on-cel-expression: event == "pull_request" && target_branch
-      == "master" && files.all.exists(x, x.matches('grafana-ubi9/|.tekton/grafana-ubi9-master-pull-request.yaml|.tekton/grafana-ubi9-master-push.yaml'))
+    pipelinesascode.tekton.dev/max-keep-runs: "25"
+    pipelinesascode.tekton.dev/on-cel-expression: event == "push" && target_branch
+      == "master" && files.all.exists(x, x.matches('grafana-ubi/|.tekton/grafana-ubi-master-pull-request.yaml|.tekton/grafana-ubi-master-push.yaml'))
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: container-images-master
-    appstudio.openshift.io/component: grafana-ubi9-master
+    appstudio.openshift.io/component: grafana-ubi-master
     pipelines.appstudio.openshift.io/type: build
-  name: grafana-ubi9-master-on-pull-request
+  name: grafana-ubi-master-on-push
   namespace: app-sre-tenant
 spec:
   params:
@@ -23,13 +22,11 @@ spec:
   - name: revision
     value: '{{revision}}'
   - name: output-image
-    value: quay.io/redhat-user-workloads/app-sre-tenant/container-images-master/grafana-ubi9-master:on-pr-{{revision}}
-  - name: image-expires-after
-    value: 5d
+    value: quay.io/redhat-user-workloads/app-sre-tenant/container-images-master/grafana-ubi-master:{{revision}}
   - name: dockerfile
-    value: grafana-ubi9/Dockerfile
+    value: grafana-ubi/Dockerfile
   - name: path-context
-    value: grafana-ubi9/
+    value: grafana-ubi/
   pipelineRef:
     params:
     - name: url
@@ -40,7 +37,7 @@ spec:
       value: pipelines/multi-arch-build-pipeline.yaml
     resolver: git
   taskRunTemplate:
-    serviceAccountName: build-pipeline-grafana-ubi9-master
+    serviceAccountName: build-pipeline-grafana-ubi-master
   workspaces:
   - name: workspace
     volumeClaimTemplate:

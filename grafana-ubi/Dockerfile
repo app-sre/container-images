@@ -15,7 +15,7 @@ FROM registry.access.redhat.com/ubi9-minimal@sha256:92b1d5747a93608b6adb64dfd545
 ARG GF_VERSION
 USER root
 
-RUN mkdir /etc/grafana /var/lib/grafana /var/log/grafana && \
+RUN mkdir /etc/grafana /var/lib/grafana /var/log/grafana /usr/share/grafana && \
     useradd -u 1001 -g 0 -r -d /usr/share/grafana -s /sbin/nologin grafana && \
     chgrp -R 0 /etc/grafana /var/lib/grafana /var/log/grafana /usr/share/grafana && \
     chmod -R g=u /var/lib/grafana /var/log/grafana /usr/share/grafana
