@@ -8,8 +8,6 @@ RUN microdnf install -y tar gzip wget && mkdir /tmp/grafana-install && \
     wget -O /tmp/grafana.tar.gz https://dl.grafana.com/oss/release/grafana-${GF_VERSION}.linux-amd64.tar.gz && \
     tar -zxvf /tmp/grafana.tar.gz --directory=/tmp/grafana-install
 
-RUN wget https://raw.githubusercontent.com/grafana/grafana/refs/tags/v${GF_VERSION}/packaging/docker/run.sh -O /usr/bin/run-grafana && chmod +x /usr/bin/run-grafana
-
 FROM registry.access.redhat.com/ubi9-minimal@sha256:92b1d5747a93608b6adb64dfd54515c3c5a360802db4706765ff3d8470df6290 AS base
 
 ARG GF_VERSION
@@ -21,7 +19,8 @@ RUN mkdir /etc/grafana /var/lib/grafana /var/log/grafana /usr/share/grafana && \
     chmod -R g=u /var/lib/grafana /var/log/grafana /usr/share/grafana
 
 COPY --from=downloader --chown=1001:0 /tmp/grafana-install/grafana-v${GF_VERSION} /usr/share/grafana/
-COPY --from=downloader --chown=1001:0 /usr/bin/run-grafana /usr/bin/run-grafana
+COPY --from=downloader --chown=1001:0 /tmp/grafana-install/grafana-v${GF_VERSION}/packaging/docker/run.sh /usr/bin/run-grafana
+COPY --from=downloader --chown=1001:0 /tmp/grafana-install/grafana-v${GF_VERSION}/conf/sample.ini /etc/grafana/grafana.ini
 
 COPY LICENSE /licenses/LICENSE
 
