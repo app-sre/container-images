@@ -39,4 +39,3 @@ COPY --chown=0:0 --from=terraform /usr/local/bin/terraform /usr/local/bin/
 COPY --chown=0:0 --from=terraform /plugins/ /plugins/
 
 ENTRYPOINT ["entrypoint.sh"]
-
