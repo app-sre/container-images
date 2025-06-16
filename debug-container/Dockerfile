@@ -34,3 +34,6 @@ RUN pip install awscli redis
 
 # Set the prompt to make it clear that this is a debug container
 ENV PS1="\[\e[31m\]debug-container\[\e[0m\]\n\[\e[0;32m\]\u\[\e[m\]@\[\e[0;33m\]\h\[\e[m\]:\[\e[0;34m\]\w\[\e[m\] \$ "
+
+# Copy our redis-cli wrapper script into the container. This script is used by automated-actions!
+COPY redis-cli-ext /usr/local/bin/redis-cli-ext
