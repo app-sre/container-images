@@ -16,7 +16,7 @@ ENV OC_VERSION=4.12.46
 ENV TF_VERSION=1.6.6
 ENV HELM_VERSION=3.11.1
 ENV GIT_SECRETS_VERSION=1.3.0
-ENV PROMETHEUS_VERSION=2.54.1
+ENV PROMETHEUS_VERSIONS="2.55.1 3.2.1"
 ENV ALERTMANAGER_VERSION=0.28.1
 
 
@@ -80,8 +80,11 @@ RUN curl -sfL https://github.com/awslabs/git-secrets/archive/${GIT_SECRETS_VERSI
     rm -rf git-secrets*
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN curl -sfL https://github.com/prometheus/prometheus/releases/download/v${PROMETHEUS_VERSION}/prometheus-${PROMETHEUS_VERSION}.linux-amd64.tar.gz \
-    | tar -zxf - -C /usr/local/bin --strip-components=1 prometheus-${PROMETHEUS_VERSION}.linux-amd64/promtool
+RUN for version in ${PROMETHEUS_VERSIONS}; do \
+    curl -sfL https://github.com/prometheus/prometheus/releases/download/v${version}/prometheus-${version}.linux-amd64.tar.gz \
+    | tar -zxf - -C /usr/local/bin --strip-components=1 prometheus-${version}.linux-amd64/promtool && \
+    mv /usr/local/bin/promtool /usr/local/bin/promtool-${version}; \
+    done
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN curl -sfL https://github.com/prometheus/alertmanager/releases/download/v${ALERTMANAGER_VERSION}/alertmanager-${ALERTMANAGER_VERSION}.linux-amd64.tar.gz \
@@ -92,6 +95,7 @@ FROM registry.access.redhat.com/ubi9/ubi-minimal:9.5@sha256:4c8830d349732ed80665
 
 ENV TF_PLUGIN_LOCAL_DIR=/usr/local/share/terraform/
 ENV TF_PLUGIN_CACHE_DIR=/.terraform.d/plugin-cache/
+ENV DEFAULT_PROMETHEUS_VERSION=2.55.1
 
 # Terraform providers
 COPY --chown=0:0 --from=downloader \
@@ -105,9 +109,12 @@ COPY --chown=0:0 --from=downloader \
     /usr/local/bin/terraform \
     /usr/local/bin/helm \
     /usr/local/bin/git-secrets \
-    /usr/local/bin/promtool \
+    /usr/local/bin/promtool* \
     /usr/local/bin/amtool \
     /usr/local/bin/
+
+COPY switch-promtool /usr/local/bin/
+RUN switch-promtool $DEFAULT_PROMETHEUS_VERSION
 
 RUN mkdir -p ${TF_PLUGIN_CACHE_DIR} && \
     chmod 0775 ${TF_PLUGIN_CACHE_DIR} && \
