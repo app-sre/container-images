@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# This script is a convenience script to connect to a Redis instance
+# using the redis-cli tool.
+
+# print usage for -h and --help
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+    echo "Usage: redis-connect.sh [redis-cli arguments]"
+    echo "Example with pipe: echo \"FLUSHALL\" | redis-connect.sh"
+    echo ""
+    echo "The script uses the environment variables REDISCLI_HOST, REDISCLI_PORT, and"
+    echo "REDISCLI_AUTH to connect to the Redis server."
+    exit 1
+fi
+
+if [ -z "$REDISCLI_HOST" ]; then
+    echo "REDISCLI_HOST is not set. Please set it to the Redis server address."
+    exit 1
+fi
+if [ -z "$REDISCLI_PORT" ]; then
+    echo "REDISCLI_PORT is not set. Please set it to the Redis server port."
+    exit 1
+fi
+
+# Initialize options for redis-cli
+CLI_ARGS=("-h" "$REDISCLI_HOST" "-p" "$REDISCLI_PORT")
+
+if [ -n "$REDISCLI_AUTH" ]; then
+    CLI_ARGS+=("--tls")
+else
+    # REDISCLI_AUTH must be unset if no password is provided
+    unset REDISCLI_AUTH
+fi
+
+redis-cli "${CLI_ARGS[@]}" "$@"

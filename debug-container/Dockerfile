@@ -1,6 +1,6 @@
 # Locking this to a specific Fedora version for now. New releases of Postgresql, and Fedora versions going out of
 # support will drive this upgrade every 6-12 months.
-FROM quay.io/fedora/fedora:43@sha256:6949fc1c927bc4a9bf6ab81a995ac0f0f3bc69cdeeab2c90c42fb2b2906976ba
+FROM quay.io/fedora/fedora:43@sha256:5f32b834046ca567cf7956d8bdf680c3f87c9fa376421b4cf28cf5d023ee0d86
 
 RUN dnf -y update && \
     dnf -y install \
@@ -34,3 +34,6 @@ RUN pip install awscli redis
 
 # Set the prompt to make it clear that this is a debug container
 ENV PS1="\[\e[31m\]debug-container\[\e[0m\]\n\[\e[0;32m\]\u\[\e[m\]@\[\e[0;33m\]\h\[\e[m\]:\[\e[0;34m\]\w\[\e[m\] \$ "
+
+# Copy our redis-cli wrapper script into the container. This script is used by automated-actions!
+COPY redis-cli-ext /usr/local/bin/redis-cli-ext
