@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -euo pipefail
+
+VERSION="$1"
+TARGET="/usr/local/bin/promtool-${VERSION}"
+
+if [[ ! -x "${TARGET}" ]]; then
+  echo "Error: promtool version ${VERSION} not found."
+  exit 1
+fi
+
+ln -sf "${TARGET}" /usr/local/bin/promtool
+echo "Switched to promtool ${VERSION}"
