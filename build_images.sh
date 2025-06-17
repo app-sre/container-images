@@ -6,20 +6,11 @@ set -euo pipefail
 
 DRY_RUN=${DRY_RUN:-}
 
-# Set custom auth file paths for docker and podman
-TEMP_DIR=$(mktemp -d)
-export DOCKER_CONFIG=${TEMP_DIR}
-export REGISTRY_AUTH_FILE=${TEMP_DIR}/auth.json
-
 DOCKER_REGISTRY=${DOCKER_REGISTRY:-quay.io}
 DOCKER_ORG=${DOCKER_ORG:-app-sre}
 SET_X=${SET_X:-}
 [[ -n "$SET_X" ]] && set -x
 PREVIOUS_BUILD_SHA_FILE=./PREVIOUS_BUILD_SHA
-
-# This could be defined inside get_authenticated_docker_command
-# but some bash interpreters were executing this on function exit
-trap 'rm -rf $TEMP_DIR' EXIT
 
 function log() {
     local to_log=${1}
