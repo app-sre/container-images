@@ -11,6 +11,7 @@ RUN microdnf install -y tar gzip wget && mkdir /tmp/grafana-install && \
 FROM registry.access.redhat.com/ubi9-minimal@sha256:92b1d5747a93608b6adb64dfd54515c3c5a360802db4706765ff3d8470df6290 AS base
 
 ARG GF_VERSION
+LABEL konflux.additional-tags=${GF_VERSION}
 
 COPY LICENSE /licenses/LICENSE
 
