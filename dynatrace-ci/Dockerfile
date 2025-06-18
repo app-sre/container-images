@@ -3,7 +3,7 @@ FROM registry.access.redhat.com/ubi9-minimal@sha256:f172b3082a3d1bbe789a1057f038
 USER 0
 
 # Terraform versions and other related variables
-ENV TF_VERSION="1.6.0" \
+ENV TF_VERSION="1.4.6" \
     TF_PLUGIN_CACHE_DIR=/plugins/ \
     TF_PLUGIN_CACHE_MAY_BREAK_DEPENDENCY_LOCK_FILE=true
 
