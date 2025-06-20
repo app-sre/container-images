@@ -1,4 +1,4 @@
-ARG GF_VERSION="10.4.1"
+ARG GF_VERSION="11.6.3"
 
 FROM registry.access.redhat.com/ubi9-minimal@sha256:92b1d5747a93608b6adb64dfd54515c3c5a360802db4706765ff3d8470df6290 AS downloader
 
