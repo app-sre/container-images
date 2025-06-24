@@ -1,5 +1,6 @@
-FROM quay.io/app-sre/qontract-reconcile-base:0.16.0 as base
+FROM quay.io/redhat-services-prod/app-sre-tenant/container-images-master/qontract-reconcile-base-master:1.0.0-1 as base
 
+LABEL konflux.additional-tags=1.0.0
 WORKDIR /work
 
 RUN mkdir ~/.gnupg && \
