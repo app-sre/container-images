@@ -27,6 +27,8 @@ spec:
     value: qontract-reconcile-base/Dockerfile
   - name: path-context
     value: qontract-reconcile-base/
+  - name: target-stage
+    value: prod
   pipelineRef:
     params:
     - name: url
