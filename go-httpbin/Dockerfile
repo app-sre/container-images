@@ -2,7 +2,7 @@ FROM registry.access.redhat.com/ubi9/go-toolset@sha256:e0ad156b08e0b50ad509d7951
 ARG HTTPBIN_VERSION=v2.18.1
 RUN go install github.com/mccutchen/go-httpbin/v2/cmd/go-httpbin@${HTTPBIN_VERSION}
 
-FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
+FROM registry.access.redhat.com/ubi9/ubi-minimal:latest@sha256:383329bf9c4f968e87e85d30ba3a5cb988a3bbde28b8e4932dcd3a025fd9c98c
 WORKDIR /
 COPY --from=builder /opt/app-root/src/go/bin/go-httpbin /usr/bin
 ENTRYPOINT ["/usr/bin/go-httpbin"]
