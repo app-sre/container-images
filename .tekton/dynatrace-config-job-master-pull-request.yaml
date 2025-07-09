@@ -37,7 +37,7 @@ spec:
     - name: revision
       value: main
     - name: pathInRepo
-      value: pipelines/multi-arch-build-pipeline.yaml
+      value: pipelines/multi-arch-build-pipeline.bak.yaml
     resolver: git
   taskRunTemplate:
     serviceAccountName: build-pipeline-dynatrace-config-job-master
