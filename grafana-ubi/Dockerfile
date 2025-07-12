@@ -1,6 +1,6 @@
 ARG GF_VERSION="11.6.3"
 
-FROM registry.access.redhat.com/ubi9-minimal@sha256:92b1d5747a93608b6adb64dfd54515c3c5a360802db4706765ff3d8470df6290 AS downloader
+FROM registry.access.redhat.com/ubi9-minimal@sha256:11db23b63f9476e721f8d0b8a2de5c858571f76d5a0dae2ec28adf08cbaf3652 AS downloader
 
 ARG GF_VERSION
 
@@ -8,7 +8,7 @@ RUN microdnf install -y tar gzip wget && mkdir /tmp/grafana-install && \
     wget -O /tmp/grafana.tar.gz https://dl.grafana.com/oss/release/grafana-${GF_VERSION}.linux-amd64.tar.gz && \
     tar -zxvf /tmp/grafana.tar.gz --directory=/tmp/grafana-install
 
-FROM registry.access.redhat.com/ubi9-minimal@sha256:92b1d5747a93608b6adb64dfd54515c3c5a360802db4706765ff3d8470df6290 AS base
+FROM registry.access.redhat.com/ubi9-minimal@sha256:11db23b63f9476e721f8d0b8a2de5c858571f76d5a0dae2ec28adf08cbaf3652 AS base
 
 ARG GF_VERSION
 LABEL konflux.additional-tags=${GF_VERSION}
