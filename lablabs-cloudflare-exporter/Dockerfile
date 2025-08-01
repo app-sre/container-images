@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/go-toolset:1.18.9@sha256:4b55f47e67e019eda42d7f959918cfa53b6d0580b73234b46675bc598e9e2e4e as builder
+FROM registry.access.redhat.com/ubi8/go-toolset:1.24.4-1753663298@sha256:844dfc3af513533d9fc4c836bfd1c52455b4ed55d05c6ee942dc140f0903d0ae as builder
 ENV GOPATH=/go/
 ENV GO111MODULE=on
 USER root
@@ -9,7 +9,7 @@ RUN git clone \
 # RUN go get -d -v
 RUN CGO_ENABLED=0 GOOS=linux go build -o cloudflare_exporter .
 
-FROM registry.access.redhat.com/ubi8-minimal:8.10-1130@sha256:c12e67af6a7e15113d76bc72f10bef2045c026c71ec8b7124c8a075458188a83
+FROM registry.access.redhat.com/ubi8-minimal:8.10-1753978370@sha256:af9b4a20cf942aa5bce236fedfefde887a7d89eb7c69f727bd0af9f5c80504ab
 RUN microdnf update -y \
     && rm -rf /var/cache/yum \
     && microdnf install ca-certificates
