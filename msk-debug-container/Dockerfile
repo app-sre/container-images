@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9/openjdk-21@sha256:b92d685a56854474dfef0dfe0975003e761dcbefe707fa3e0ca7d0d74a77863d
+FROM registry.access.redhat.com/ubi9/openjdk-21@sha256:429a4c07c0a256e8a817a47c43b829a619c62be04cb6b4aa4b3056af580bd98f
 ARG KAFKA_VERSION
 ARG KAFKA_VERSION_PATCH
 
