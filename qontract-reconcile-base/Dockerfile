@@ -18,7 +18,7 @@ ENV HELM_VERSION=3.11.1
 ENV GIT_SECRETS_VERSION=1.3.0
 ENV PROMETHEUS_VERSIONS="2.55.1 3.2.1"
 ENV ALERTMANAGER_VERSION=0.28.1
-ENV SLOTH_VERSION=0.12.0
+ARG SLOTH_VERSION=0.12.0
 
 
 RUN for version in ${TF_PROVIDER_AWS_VERSIONS}; do \
@@ -91,9 +91,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN curl -sfL https://github.com/prometheus/alertmanager/releases/download/v${ALERTMANAGER_VERSION}/alertmanager-${ALERTMANAGER_VERSION}.linux-amd64.tar.gz \
     | tar -zxf - -C /usr/local/bin --strip-components=1 alertmanager-${ALERTMANAGER_VERSION}.linux-amd64/amtool
 
-RUN curl -sfL https://github.com/slok/sloth/releases/download/v${SLOTH_VERSION}/sloth-linux-amd64 \
-    -o /usr/local/bin/sloth && \
-    chmod +x /usr/local/bin/sloth
+COPY --from=ghcr.io/slok/sloth:v${SLOTH_VERSION} /usr/local/bin/sloth /usr/local/bin/sloth
 
 FROM registry.access.redhat.com/ubi9/ubi-minimal:9.5@sha256:a50731d3397a4ee28583f1699842183d4d24fadcc565c4688487af9ee4e13a44 as prod
 
