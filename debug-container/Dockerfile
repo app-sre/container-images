@@ -13,6 +13,7 @@ RUN dnf -y update && \
         curl \
         ethtool \
         git \
+        gcc \
         htop \
         iotop \
         iputils \
@@ -46,12 +47,13 @@ RUN dnf -y update && \
         telnet \
         tmux \
         traceroute \
+        wireshark-cli \
         util-linux \
         yq \
     && dnf clean all
 
 # Install some python packages using pip
-RUN pip install awscli redis 
+RUN pip install awscli redis memray py-spy
 
 # Set the prompt to make it clear that this is a debug container
 ENV PS1="\[\e[31m\]debug-container\[\e[0m\]\n\[\e[0;32m\]\u\[\e[m\]@\[\e[0;33m\]\h\[\e[m\]:\[\e[0;34m\]\w\[\e[m\] \$ "
