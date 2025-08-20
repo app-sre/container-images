@@ -95,7 +95,7 @@ COPY --from=ghcr.io/slok/sloth:v${SLOTH_VERSION} /usr/local/bin/sloth /usr/local
 
 FROM registry.access.redhat.com/ubi9/ubi-minimal:9.5@sha256:a50731d3397a4ee28583f1699842183d4d24fadcc565c4688487af9ee4e13a44 as prod
 
-LABEL konflux.additional-tags=1.0.0
+LABEL konflux.additional-tags=1.1.0
 
 ENV TF_PLUGIN_LOCAL_DIR=/usr/local/share/terraform/
 ENV TF_PLUGIN_CACHE_DIR=/.terraform.d/plugin-cache/
