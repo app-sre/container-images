@@ -1,6 +1,6 @@
 # Locking this to a specific Fedora version for now. New releases of Postgresql, and Fedora versions going out of
 # support will drive this upgrade every 6-12 months.
-FROM quay.io/fedora/fedora:43.20250718.0@sha256:fdf72109b0713cd6fac7e3e2ad6c50502578ec5c4a64c4e71f16ac603504c211
+FROM quay.io/fedora/fedora:44@sha256:aea658d6dc6078bc620443ab07ac36778dfdb4bacfa6ade55de0ee759be4d8b5
 
 RUN dnf -y update && \
     dnf -y install \
@@ -9,7 +9,7 @@ RUN dnf -y update && \
         bridge-utils \
         community-mysql \
         clang \
-        crash \ 
+        crash \
         curl \
         ethtool \
         git \
