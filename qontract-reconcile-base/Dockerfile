@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9/ubi:9.5@sha256:d07a5e080b8a9b3624d3c9cfbfada9a6baacd8e6d4065118f0e80c71ad518044 AS downloader
+FROM registry.access.redhat.com/ubi9/ubi@sha256:dbc1e98d14a022542e45b5f22e0206d3f86b5bdf237b58ee7170c9ddd1b3a283 AS downloader
 
 RUN dnf -y install unzip glibc-langpack-en
 
@@ -18,7 +18,6 @@ ENV HELM_VERSION=3.11.1
 ENV GIT_SECRETS_VERSION=1.3.0
 ENV PROMETHEUS_VERSIONS="2.55.1 3.2.1"
 ENV ALERTMANAGER_VERSION=0.28.1
-ARG SLOTH_VERSION=0.12.0
 
 
 RUN for version in ${TF_PROVIDER_AWS_VERSIONS}; do \
@@ -91,11 +90,11 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN curl -sfL https://github.com/prometheus/alertmanager/releases/download/v${ALERTMANAGER_VERSION}/alertmanager-${ALERTMANAGER_VERSION}.linux-amd64.tar.gz \
     | tar -zxf - -C /usr/local/bin --strip-components=1 alertmanager-${ALERTMANAGER_VERSION}.linux-amd64/amtool
 
-COPY --from=ghcr.io/slok/sloth:v${SLOTH_VERSION} /usr/local/bin/sloth /usr/local/bin/sloth
+COPY --from=ghcr.io/slok/sloth:v0.12.0 /usr/local/bin/sloth /usr/local/bin/sloth
 
-FROM registry.access.redhat.com/ubi9/ubi-minimal:9.5@sha256:a50731d3397a4ee28583f1699842183d4d24fadcc565c4688487af9ee4e13a44 as prod
+FROM registry.access.redhat.com/ubi9/python-312-minimal@sha256:30b4dc48a9f9661d9fc15795f2a144fdd1e8d2b59f4e5530eb51571f853270f3 AS prod
 
-LABEL konflux.additional-tags=1.1.0
+LABEL konflux.additional-tags=1.2.0
 
 ENV TF_PLUGIN_LOCAL_DIR=/usr/local/share/terraform/
 ENV TF_PLUGIN_CACHE_DIR=/.terraform.d/plugin-cache/
@@ -119,25 +118,23 @@ COPY --chown=0:0 --from=downloader \
     /usr/local/bin/
 
 COPY switch-promtool /usr/local/bin/
+
+USER 0
 RUN switch-promtool $DEFAULT_PROMETHEUS_VERSION
 
 RUN mkdir -p ${TF_PLUGIN_CACHE_DIR} && \
     chmod 0775 ${TF_PLUGIN_CACHE_DIR} && \
     microdnf upgrade -y && \
     microdnf install -y \
-        git \
-        glibc-langpack-en \
-        libpq \
-        openssh-clients \
-        openssl \
-        python3.11 \
-        skopeo \
-        findutils && \
-    microdnf update tzdata -y && \
-    microdnf reinstall tzdata -y && \
-    microdnf clean all && \
-    update-alternatives --install /usr/bin/python3 python /usr/bin/python3.11 1 && \
-    python3 -m ensurepip
+    git \
+    libpq \
+    openssh-clients \
+    openssl \
+    skopeo && \
+    # The removal of /usr/share/zoneinfo from UBI minimal images is intentional to reduce the image size. The reinstallation restores it.
+    # See https://access.redhat.com/solutions/5616681 for more details.
+    microdnf update tzdata -y && microdnf reinstall tzdata -y && \
+    microdnf clean all
 
-RUN test -f /etc/localtime || ln -s /usr/share/zoneinfo/UTC /etc/localtime
+# Set timezone to UTC
 ENV TZ=UTC
