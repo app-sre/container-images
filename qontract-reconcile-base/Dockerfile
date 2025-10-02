@@ -137,6 +137,5 @@ RUN mkdir -p ${TF_PLUGIN_CACHE_DIR} && \
     microdnf update tzdata -y && microdnf reinstall tzdata -y && \
     microdnf clean all
 
-RUN ln -s /usr/bin/python3.12 /usr/bin/python3
 # Set timezone to UTC
-RUN ln -s /usr/share/zoneinfo/UTC /etc/localtime
+ENV TZ=UTC
