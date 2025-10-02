@@ -132,6 +132,9 @@ RUN mkdir -p ${TF_PLUGIN_CACHE_DIR} && \
     openssh-clients \
     openssl \
     skopeo && \
+    # The removal of /usr/share/zoneinfo from UBI minimal images is intentional to reduce the image size. The reinstallation restores it.
+    # See https://access.redhat.com/solutions/5616681 for more details.
+    microdnf update tzdata -y && microdnf reinstall tzdata -y && \
     microdnf clean all
 
 RUN ln -s /usr/bin/python3.12 /usr/bin/python3
