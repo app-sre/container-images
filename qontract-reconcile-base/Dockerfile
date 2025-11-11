@@ -10,9 +10,6 @@ ENV TF_PROVIDER_CLOUDFLARE_VERSIONS="3.32.0 4.26.0"
 ENV TF_PROVIDER_RANDOM_VERSIONS="3.4.3"
 ENV TF_PROVIDER_TIME_VERSIONS="0.9.1"
 ENV TF_PROVIDER_CLOUDINIT_VERSIONS="2.3.3"
-# be careful about changing OC version and consult with FT-3 to check with what OpenShift
-# cluster versions are running as they differ from commercial
-ENV OC_VERSION=4.12.46
 ENV TF_VERSION=1.6.6
 ENV HELM_VERSION=3.11.1
 ENV GIT_SECRETS_VERSION=1.3.0
@@ -55,12 +52,7 @@ RUN for version in ${TF_PROVIDER_CLOUDINIT_VERSIONS}; do \
     unzip /tmp/package-cloudinit-${version}.zip -d /tmp/terraform-providers/hashicorp/cloudinit/${version}/linux_amd64/; \
     done
 
-
-RUN curl -sfL https://mirror.openshift.com/pub/openshift-v4/clients/ocp/${OC_VERSION}/openshift-client-linux.tar.gz \
-    -o oc.tar.gz && \
-    tar -zvxf oc.tar.gz && \
-    mv oc kubectl /usr/local/bin && \
-    rm oc.tar.gz
+COPY --from=registry.redhat.io/openshift4/ose-cli-rhel9:v4.19.0@sha256:64867e62dbbafe779cdb4233b7c7c8686932717177e5825058e23beccbb3207b /usr/bin/oc /usr/bin/kubectl /usr/local/bin/
 
 RUN curl -sfL https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip \
     -o terraform.zip && \
@@ -94,7 +86,7 @@ COPY --from=ghcr.io/slok/sloth:v0.12.0@sha256:966590f31d9cb757034d20505579fc170e
 
 FROM registry.access.redhat.com/ubi9/python-312-minimal@sha256:30b4dc48a9f9661d9fc15795f2a144fdd1e8d2b59f4e5530eb51571f853270f3 AS prod
 
-LABEL konflux.additional-tags=1.2.0
+LABEL konflux.additional-tags=1.3.0
 
 ENV TF_PLUGIN_LOCAL_DIR=/usr/local/share/terraform/
 ENV TF_PLUGIN_CACHE_DIR=/.terraform.d/plugin-cache/
