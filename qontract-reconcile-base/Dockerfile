@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9/ubi@sha256:dbc1e98d14a022542e45b5f22e0206d3f86b5bdf237b58ee7170c9ddd1b3a283 AS downloader
+FROM registry.access.redhat.com/ubi9/ubi@sha256:bbac76ac0310eefd6298ed3ab3c1710e1c842f1f778800de0f49e660b402bdc5 AS downloader
 
 RUN dnf -y install unzip glibc-langpack-en
 
@@ -84,7 +84,7 @@ RUN curl -sfL https://github.com/prometheus/alertmanager/releases/download/v${AL
 
 COPY --from=ghcr.io/slok/sloth:v0.12.0@sha256:966590f31d9cb757034d20505579fc170ef562227faaf6e8f36609e64259f121 /usr/local/bin/sloth /usr/local/bin/sloth
 
-FROM registry.access.redhat.com/ubi9/python-312-minimal@sha256:30b4dc48a9f9661d9fc15795f2a144fdd1e8d2b59f4e5530eb51571f853270f3 AS prod
+FROM registry.access.redhat.com/ubi9/python-312-minimal@sha256:26c9006c05687563561ea1a81db4cb71008da2ca8994ddef2ce5657f6ec34d70 AS prod
 
 LABEL konflux.additional-tags=1.3.0
 
