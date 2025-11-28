@@ -1,7 +1,7 @@
 
 # Build a FedRamp-centric (appsre-ft3) container for debugging issues 
 FROM quay.io/app-sre/ubi9-ubi-minimal@sha256:9bed53318702feb9b15c79d56d4fc2a6857fdffa335eee7be53421989c7658d1
-COPY --from=ghcr.io/astral-sh/uv:0.6.14@sha256:3362a526af7eca2fcd8604e6a07e873fb6e4286d8837cb753503558ce1213664 /uv /bin/uv
+COPY --from=ghcr.io/astral-sh/uv:0.9.13@sha256:f07d1bf7b1fb4b983eed2b31320e25a2a76625bdf83d5ff0208fe105d4d8d2f5 /uv /bin/uv
 
 
 # install uv (see: https://docs.astral.sh/uv/guides/integration/docker/#using-uv-in-docker)
