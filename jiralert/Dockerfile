@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/go-toolset:1.20.12@sha256:43cf2468d9ebecbdf69503ca9cfb4a7c58ee86c94b64fb024c8aebd1bedc816e as builder
+FROM registry.access.redhat.com/ubi8/go-toolset:1.24.6-1764274816@sha256:c0d55dbaa26d2f2de93f5d7be61d1d3d003e42ed6ba87480eb927da82541f124 as builder
 ENV GOPATH=/go/
 ENV GO111MODULE=on
 USER root
@@ -9,7 +9,7 @@ RUN git checkout d43cbab62126d543e8e789f6374d9e745693cce2
 # run just build and skip all other steps because the linter needs to much memory
 RUN make build
 
-FROM registry.access.redhat.com/ubi8-minimal:8.10-1130@sha256:c12e67af6a7e15113d76bc72f10bef2045c026c71ec8b7124c8a075458188a83
+FROM registry.access.redhat.com/ubi8-minimal:8.10-1764046129@sha256:a670c5b613280e17a666c858c9263a50aafe1a023a8d5730c7a83cb53771487b
 LABEL konflux.additional-tags=1.0.0
 RUN microdnf update -y \
     && rm -rf /var/cache/yum \
