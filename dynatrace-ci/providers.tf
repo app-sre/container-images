@@ -6,7 +6,7 @@ terraform {
     }
 
     vault = {
-      version = "4.2.0"
+      version = "5.6.0"
     }
   }
 }
