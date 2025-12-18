@@ -35,7 +35,7 @@ RUN dnf -y update && \
         socat \
         strace \
         tar \
-        vim 
+        vim \
     && dnf clean all
 
 # Install kubectl
