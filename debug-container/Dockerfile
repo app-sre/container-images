@@ -7,7 +7,6 @@ RUN dnf -y update && \
     dnf -y install \
         bind-utils \
         mariadb \
-        curl \
         ethtool \
         file \
         gcc \
