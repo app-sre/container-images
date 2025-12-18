@@ -1,5 +1,3 @@
-# Locking this to a specific UBI version for now. New releases of Postgresql, and UBI versions going out of
-# support will drive this upgrade every 6-12 months.
 FROM registry.access.redhat.com/ubi9/ubi:9.5@sha256:d07a5e080b8a9b3624d3c9cfbfada9a6baacd8e6d4065118f0e80c71ad518044
 
 # Enable required repositories
