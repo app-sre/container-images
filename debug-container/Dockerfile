@@ -35,26 +35,6 @@ RUN dnf -y update && \
         vim \
     && dnf clean all
 
-# Install kubectl
-RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
-    chmod +x kubectl && \
-    mv kubectl /usr/local/bin/
-
-# Install OpenShift CLI (oc) - adjust version as needed
-ENV OC_VERSION=4.16.2
-RUN curl -LO "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/${OC_VERSION}/openshift-client-linux.tar.gz" && \
-    tar -xzf openshift-client-linux.tar.gz && \
-    chmod +x oc kubectl && \
-    mv oc kubectl /usr/local/bin/ && \
-    rm -f openshift-client-linux.tar.gz
-
-# Install Helm
-ENV HELM_VERSION=3.19.2
-RUN curl -LO "https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz" && \
-    tar -xzf helm-v${HELM_VERSION}-linux-amd64.tar.gz && \
-    mv linux-amd64/helm /usr/local/bin/ && \
-    chmod +x /usr/local/bin/helm && \
-    rm -rf linux-amd64 helm-v${HELM_VERSION}-linux-amd64.tar.gz
 
 # Install Python packages for debugging and API testing
 RUN pip install --no-cache-dir \
