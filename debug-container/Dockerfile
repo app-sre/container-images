@@ -1,11 +1,11 @@
 # Locking this to a specific Fedora version for now. New releases of Postgresql, and Fedora versions going out of
 # support will drive this upgrade every 6-12 months.
-FROM quay.io/fedora/fedora:43@sha256:1683087f218c40df7ad0814942653a436e7e2a0c9f19b2d5a01481884a7c952b
+FROM registry.access.redhat.com/ubi9/ubi:9.5@sha256:d07a5e080b8a9b3624d3c9cfbfada9a6baacd8e6d4065118f0e80c71ad518044
 
 RUN dnf -y update && \
     dnf -y install \
         bind-utils \
-        community-mysql \
+        mariadb \
         curl \
         git \
         htop \
