@@ -1,62 +1,54 @@
-# Locking this to a specific Fedora version for now. New releases of Postgresql, and Fedora versions going out of
-# support will drive this upgrade every 6-12 months.
-FROM quay.io/fedora/fedora:44@sha256:aea658d6dc6078bc620443ab07ac36778dfdb4bacfa6ade55de0ee759be4d8b5
+FROM registry.access.redhat.com/ubi9/ubi:9.5@sha256:d07a5e080b8a9b3624d3c9cfbfada9a6baacd8e6d4065118f0e80c71ad518044
 
+# Enable required repositories
 RUN dnf -y update && \
     dnf -y install \
-        audit \
         bind-utils \
-        bridge-utils \
-        community-mysql \
-        clang \
-        crash \
-        curl \
+        mariadb \
         ethtool \
-        git \
+        file \
         gcc \
-        htop \
-        iotop \
-        iputils \
+        gdb \
+        git \
         iproute \
+        iputils \
         jq \
-        kdump-utils \
-        kexec-tools \
-        krb5-devel \
-        libsysstat \
-        ltrace \
+        less \
+        lsof \
         mtr \
-        nethogs \
+        nano \
         net-tools \
         nmap \
+        nmap-ncat \
         openssl \
-        perf \
         postgresql \
-        postgresql-contrib \
         procps-ng \
         python3-devel \
         python3-pip \
         python3-psycopg2 \
         python3-PyMySQL \
-        redis \
         rsync \
-        setroubleshoot \
         skopeo \
+        socat \
         strace \
-        sysstat \
-        tcpdump \
-        telnet \
-        tmux \
-        traceroute \
-        wireshark-cli \
-        util-linux \
-        yq \
+        tar \
+        vim \
     && dnf clean all
 
-# Install some python packages using pip
-RUN pip install awscli redis memray py-spy
+
+# Install Python packages for debugging and API testing
+RUN pip install --no-cache-dir \
+    awscli \
+    redis \
+    memray \
+    py-spy \
+    httpie \
+    graphql-core \
+    requests
+
 
 # Set the prompt to make it clear that this is a debug container
-ENV PS1="\[\e[31m\]debug-container\[\e[0m\]\n\[\e[0;32m\]\u\[\e[m\]@\[\e[0;33m\]\h\[\e[m\]:\[\e[0;34m\]\w\[\e[m\] \$ "
+RUN echo 'export PS1="\[\033[31m\]debug-container\[\033[0m\]\n\[\033[0;32m\]\u\[\033[m\]@\[\033[0;33m\]\h\[\033[m\]:\[\033[0;34m\]\w\[\033[m\] \$ "' >> /etc/bashrc
 
 # Copy our redis-cli wrapper script into the container. This script is used by automated-actions!
 COPY redis-cli-ext /usr/local/bin/redis-cli-ext
