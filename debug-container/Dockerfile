@@ -5,20 +5,14 @@ FROM registry.access.redhat.com/ubi9/ubi:9.5@sha256:d07a5e080b8a9b3624d3c9cfbfad
 # Enable required repositories
 RUN dnf -y update && \
     dnf -y install \
-        audit \
         bind-utils \
         mariadb \
         curl \
         ethtool \
         file \
-        findutils \
         gcc \
         gdb \
         git \
-        grep \
-        gzip \
-        htop \
-        iotop \
         iproute \
         iputils \
         jq \
@@ -26,34 +20,22 @@ RUN dnf -y update && \
         lsof \
         mtr \
         nano \
-        nethogs \
         net-tools \
         nmap \
         nmap-ncat \
         openssl \
-        perf \
         postgresql \
-        postgresql-contrib \
         procps-ng \
         python3-devel \
         python3-pip \
         python3-psycopg2 \
         python3-PyMySQL \
-        redis \
         rsync \
         skopeo \
         socat \
         strace \
-        sysstat \
         tar \
-        tree \
-        tcpdump \
-        traceroute \
-        util-linux \
-        vim \
-        wireshark-cli \
-        which \
-        yq \
+        vim 
     && dnf clean all
 
 # Install kubectl
