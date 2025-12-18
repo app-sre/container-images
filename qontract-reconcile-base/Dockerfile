@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9/ubi:9.5@sha256:d07a5e080b8a9b3624d3c9cfbfada9a6baacd8e6d4065118f0e80c71ad518044 AS downloader
+FROM registry.access.redhat.com/ubi9/ubi@sha256:dbc1e98d14a022542e45b5f22e0206d3f86b5bdf237b58ee7170c9ddd1b3a283 AS downloader
 
 RUN dnf -y install unzip glibc-langpack-en
 
@@ -10,11 +10,8 @@ ENV TF_PROVIDER_CLOUDFLARE_VERSIONS="3.32.0 4.26.0"
 ENV TF_PROVIDER_RANDOM_VERSIONS="3.4.3"
 ENV TF_PROVIDER_TIME_VERSIONS="0.9.1"
 ENV TF_PROVIDER_CLOUDINIT_VERSIONS="2.3.3"
-# be careful about changing OC version and consult with FT-3 to check with what OpenShift
-# cluster versions are running as they differ from commercial
-ENV OC_VERSION=4.12.46
 ENV TF_VERSION=1.6.6
-ENV HELM_VERSION=3.11.1
+ENV HELM_VERSION=3.19.2
 ENV GIT_SECRETS_VERSION=1.3.0
 ENV PROMETHEUS_VERSIONS="2.55.1 3.2.1"
 ENV ALERTMANAGER_VERSION=0.28.1
@@ -55,12 +52,7 @@ RUN for version in ${TF_PROVIDER_CLOUDINIT_VERSIONS}; do \
     unzip /tmp/package-cloudinit-${version}.zip -d /tmp/terraform-providers/hashicorp/cloudinit/${version}/linux_amd64/; \
     done
 
-
-RUN curl -sfL https://mirror.openshift.com/pub/openshift-v4/clients/ocp/${OC_VERSION}/openshift-client-linux.tar.gz \
-    -o oc.tar.gz && \
-    tar -zvxf oc.tar.gz && \
-    mv oc kubectl /usr/local/bin && \
-    rm oc.tar.gz
+COPY --from=registry.redhat.io/openshift4/ose-cli-rhel9:v4.19.0@sha256:64867e62dbbafe779cdb4233b7c7c8686932717177e5825058e23beccbb3207b /usr/bin/oc /usr/bin/kubectl /usr/local/bin/
 
 RUN curl -sfL https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip \
     -o terraform.zip && \
@@ -90,10 +82,11 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN curl -sfL https://github.com/prometheus/alertmanager/releases/download/v${ALERTMANAGER_VERSION}/alertmanager-${ALERTMANAGER_VERSION}.linux-amd64.tar.gz \
     | tar -zxf - -C /usr/local/bin --strip-components=1 alertmanager-${ALERTMANAGER_VERSION}.linux-amd64/amtool
 
+COPY --from=ghcr.io/slok/sloth:v0.12.0@sha256:966590f31d9cb757034d20505579fc170ef562227faaf6e8f36609e64259f121 /usr/local/bin/sloth /usr/local/bin/sloth
 
-FROM registry.access.redhat.com/ubi9/ubi-minimal:9.5@sha256:a50731d3397a4ee28583f1699842183d4d24fadcc565c4688487af9ee4e13a44 as prod
+FROM registry.access.redhat.com/ubi9/python-312-minimal@sha256:30b4dc48a9f9661d9fc15795f2a144fdd1e8d2b59f4e5530eb51571f853270f3 AS prod
 
-LABEL konflux.additional-tags=1.0.0
+LABEL konflux.additional-tags=1.4.0
 
 ENV TF_PLUGIN_LOCAL_DIR=/usr/local/share/terraform/
 ENV TF_PLUGIN_CACHE_DIR=/.terraform.d/plugin-cache/
@@ -113,28 +106,27 @@ COPY --chown=0:0 --from=downloader \
     /usr/local/bin/git-secrets \
     /usr/local/bin/promtool* \
     /usr/local/bin/amtool \
+    /usr/local/bin/sloth \
     /usr/local/bin/
 
 COPY switch-promtool /usr/local/bin/
+
+USER 0
 RUN switch-promtool $DEFAULT_PROMETHEUS_VERSION
 
 RUN mkdir -p ${TF_PLUGIN_CACHE_DIR} && \
     chmod 0775 ${TF_PLUGIN_CACHE_DIR} && \
     microdnf upgrade -y && \
     microdnf install -y \
-        git \
-        glibc-langpack-en \
-        libpq \
-        openssh-clients \
-        openssl \
-        python3.11 \
-        skopeo \
-        findutils && \
-    microdnf update tzdata -y && \
-    microdnf reinstall tzdata -y && \
-    microdnf clean all && \
-    update-alternatives --install /usr/bin/python3 python /usr/bin/python3.11 1 && \
-    python3 -m ensurepip
+    git \
+    libpq \
+    openssh-clients \
+    openssl \
+    skopeo && \
+    # The removal of /usr/share/zoneinfo from UBI minimal images is intentional to reduce the image size. The reinstallation restores it.
+    # See https://access.redhat.com/solutions/5616681 for more details.
+    microdnf update tzdata -y && microdnf reinstall tzdata -y && \
+    microdnf clean all
 
-RUN test -f /etc/localtime || ln -s /usr/share/zoneinfo/UTC /etc/localtime
+# Set timezone to UTC
 ENV TZ=UTC

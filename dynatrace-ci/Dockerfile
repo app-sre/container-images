@@ -28,7 +28,7 @@ RUN terraform providers mirror -platform=linux_amd64 /plugins
 # We want to be able to pull tf modules from internal repos
 FROM quay.io/redhat-services-prod/app-sre-tenant/container-images-int-master/internal-redhat-ca-master:0.5.0-1 AS prod
 
-LABEL konflux.additional-tags=0.5
+LABEL konflux.additional-tags=0.6
 
 WORKDIR /terraform
 
