@@ -98,7 +98,7 @@ parameters:
 - name: IMAGE
   value: quay.io/redhat-services-prod/app-sre-tenant/container-images-master/debug-container-master
 - name: IMAGE_TAG
-  value: "fc9a636"
+  value: latest
 - name: POSTGRES_DB_SECRET_NAME
   value: "empty"
 - name: PGCONNECT_TIMEOUT
