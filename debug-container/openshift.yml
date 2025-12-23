@@ -96,7 +96,7 @@ objects:
                 optional: true
 parameters:
 - name: IMAGE
-  value: quay.io/app-sre/debug-container
+  value: quay.io/redhat-services-prod/app-sre-tenant/container-images-master/debug-container-master
 - name: IMAGE_TAG
   value: latest
 - name: POSTGRES_DB_SECRET_NAME
