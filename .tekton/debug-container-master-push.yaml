@@ -27,6 +27,8 @@ spec:
     value: debug-container/Dockerfile
   - name: path-context
     value: debug-container/
+  - name: goss-container-structure-test-file
+    value: debug-container/goss.yml
   pipelineRef:
     params:
     - name: url
