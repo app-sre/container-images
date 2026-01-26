@@ -55,3 +55,7 @@ RUN echo 'export PS1="\[\033[31m\]debug-container\[\033[0m\]\n\[\033[0;32m\]\u\[
 
 # Copy our redis-cli wrapper script into the container. This script is used by automated-actions!
 COPY redis-cli-ext /usr/local/bin/redis-cli-ext
+
+# Copy telnet wrapper script (uses nc since telnet package is not available in UBI9 repositories)
+COPY telnet /usr/local/bin/telnet
+RUN chmod +x /usr/local/bin/telnet
