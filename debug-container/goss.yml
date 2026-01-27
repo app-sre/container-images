@@ -1,7 +1,7 @@
 command:
   redis-cli --help:
     exit-status: 0
-  dig --version:
+  dig -v:
     exit-status: 0
   mysql --version:
     exit-status: 0
@@ -15,11 +15,11 @@ command:
     exit-status: 0
   git --version:
     exit-status: 0
-  ip --version:
+  ip -V:
     exit-status: 0
   jq --version:
     exit-status: 0
-  tracepath --version:
+  tracepath -V:
     exit-status: 0
   mtr --version:
     exit-status: 0
