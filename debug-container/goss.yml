@@ -1,3 +1,66 @@
 command:
   redis-cli --help:
     exit-status: 0
+
+command:
+  dig:
+    exit-status: 0
+
+command:
+  mysql:
+    exit-status: 0
+
+command:
+  ethool:
+    exit-status: 0
+
+command:
+  file:
+    exit-status: 0
+
+command:
+  gcc:
+    exit-status: 0
+
+command:
+  gdb:
+    exit-status: 0
+
+command:
+  git:
+    exit-status: 0
+
+command:
+  ip:
+    exit-status: 0
+
+command:
+  jq:
+    exit-status: 0
+
+command:
+  tracepath:
+    exit-status: 0
+
+command:
+  mtr:
+    exit-status: 0
+
+command:
+  openssl:
+    exit-status: 0
+
+command:
+  psql:
+    exit-status: 0
+
+command:
+  skopeo:
+    exit-status: 0
+
+command:
+  strace:
+    exit-status: 0
+
+
+
