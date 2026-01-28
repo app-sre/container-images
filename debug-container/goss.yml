@@ -1,3 +1,33 @@
 command:
   redis-cli --help:
     exit-status: 0
+  dig -v:
+    exit-status: 0
+  mysql --version:
+    exit-status: 0
+  ethtool --version:
+    exit-status: 0
+  file --version:
+    exit-status: 0
+  gcc --version:
+    exit-status: 0
+  gdb --version:
+    exit-status: 0
+  git --version:
+    exit-status: 0
+  ip -V:
+    exit-status: 0
+  jq --version:
+    exit-status: 0
+  tracepath -V:
+    exit-status: 0
+  mtr --version:
+    exit-status: 0
+  openssl version:
+    exit-status: 0
+  psql --version:
+    exit-status: 0
+  skopeo --version:
+    exit-status: 0
+  strace --version:
+    exit-status: 0
