@@ -6,7 +6,6 @@ ENV LC_ALL=en_US.utf8
 ENV LANG=en_US.utf8
 
 ENV TF_PROVIDER_AWS_VERSIONS="3.76.0 3.76.1 4.67.0 5.39.1"
-ENV TF_PROVIDER_CLOUDFLARE_VERSIONS="3.32.0 4.26.0"
 ENV TF_PROVIDER_RANDOM_VERSIONS="3.4.3"
 ENV TF_PROVIDER_TIME_VERSIONS="0.9.1"
 ENV TF_PROVIDER_CLOUDINIT_VERSIONS="2.3.3"
@@ -22,13 +21,6 @@ RUN for version in ${TF_PROVIDER_AWS_VERSIONS}; do \
     curl -sfL https://releases.hashicorp.com/terraform-provider-aws/${version}/terraform-provider-aws_${version}_linux_amd64.zip \
     -o /tmp/package-aws-${version}.zip; \
     unzip /tmp/package-aws-${version}.zip -d /tmp/terraform-providers/hashicorp/aws/${version}/linux_amd64/; \
-    done
-
-RUN for version in ${TF_PROVIDER_CLOUDFLARE_VERSIONS}; do \
-    mkdir -p /tmp/terraform-providers/cloudflare/cloudflare/${version}/linux_amd64 ;\
-    curl -sfL https://github.com/cloudflare/terraform-provider-cloudflare/releases/download/v${version}/terraform-provider-cloudflare_${version}_linux_amd64.zip \
-    -o /tmp/package-cloudflare-${version}.zip; \
-    unzip /tmp/package-cloudflare-${version}.zip -d /tmp/terraform-providers/cloudflare/cloudflare/${version}/linux_amd64/; \
     done
 
 RUN for version in ${TF_PROVIDER_TIME_VERSIONS}; do \
@@ -86,7 +78,7 @@ COPY --from=ghcr.io/slok/sloth:v0.12.0@sha256:966590f31d9cb757034d20505579fc170e
 
 FROM registry.access.redhat.com/ubi9/python-312-minimal@sha256:30b4dc48a9f9661d9fc15795f2a144fdd1e8d2b59f4e5530eb51571f853270f3 AS prod
 
-LABEL konflux.additional-tags=1.4.0
+LABEL konflux.additional-tags=1.5.0
 
 ENV TF_PLUGIN_LOCAL_DIR=/usr/local/share/terraform/
 ENV TF_PLUGIN_CACHE_DIR=/.terraform.d/plugin-cache/
