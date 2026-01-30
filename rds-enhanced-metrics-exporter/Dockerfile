@@ -1,10 +1,10 @@
-FROM registry.access.redhat.com/ubi9/go-toolset@sha256:14c369670cf3473d8e9b93e42d120c01b79a6f13884c396a1c89b7ca46f859b7 as builder
+FROM registry.access.redhat.com/ubi9/go-toolset@sha256:359dd4c6c4255b3f7bce4dc15ffa5a9aa65a401f819048466fa91baa8244a793 as builder
 ENV COMMIT=8de8628
 WORKDIR rds_exporter
 RUN git clone --depth 1 https://github.com/percona/rds_exporter.git . && \
     git checkout $COMMIT
 RUN make release
 
-FROM registry.access.redhat.com/ubi9-minimal@sha256:2f06ae0e6d3d9c4f610d32c480338eef474867f435d8d28625f2985e8acde6e8
+FROM registry.access.redhat.com/ubi9-minimal@sha256:bb08f2300cb8d12a7eb91dddf28ea63692b3ec99e7f0fa71a1b300f2756ea829
 COPY --from=builder /opt/app-root/src/rds_exporter/rds_exporter .
 ENTRYPOINT ["/rds_exporter", "--config.file=/rds-exporter-config/config.yml"]
