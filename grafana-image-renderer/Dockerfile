@@ -9,10 +9,11 @@
 ARG GIR_VERSION="5.8.3"
 ARG CHROME_VERSION="148.0.7778.96"
 
-# Build stage - compile Go binary from source
+# Build stage - compile Go binary from source and download Chrome
 FROM registry.access.redhat.com/ubi9/go-toolset:1.25.8@sha256:75ecb48dfaec6655bd589091902e3b9328c300befba34cb06fc5e7323099e17d AS builder
 
 ARG GIR_VERSION
+ARG CHROME_VERSION
 
 USER 0
 
@@ -31,8 +32,13 @@ RUN CGO_ENABLED=0 GOTOOLCHAIN=go1.26.2 go build \
     -ldflags '-s -w -extldflags "-static"' \
     .
 
+# Download Chrome for Testing in builder stage
+RUN dnf install -y wget unzip && \
+    wget -q "https://storage.googleapis.com/chrome-for-testing-public/${CHROME_VERSION}/linux64/chrome-headless-shell-linux64.zip" -O /tmp/chrome.zip && \
+    unzip -q /tmp/chrome.zip -d /opt && \
+    mv /opt/chrome-headless-shell-linux64 /opt/chrome
+
 # Runtime stage - UBI9 minimal
-# Using Chrome for Testing instead of EPEL chromium to avoid missing dependencies
 FROM registry.access.redhat.com/ubi9-minimal@sha256:92b1d5747a93608b6adb64dfd54515c3c5a360802db4706765ff3d8470df6290
 
 ARG GIR_VERSION
@@ -42,15 +48,8 @@ LABEL konflux.additional-tags=${GIR_VERSION}
 
 COPY LICENSE /licenses/LICENSE
 
-# Install Chrome for Testing
-# Using Chrome instead of EPEL chromium to avoid missing dependencies (pipewire, bluetooth libs)
-RUN microdnf install -y wget unzip && \
-    wget -q "https://storage.googleapis.com/chrome-for-testing-public/${CHROME_VERSION}/linux64/chrome-headless-shell-linux64.zip" -O /tmp/chrome.zip && \
-    unzip -q /tmp/chrome.zip -d /opt && \
-    mv /opt/chrome-headless-shell-linux64 /opt/chrome && \
-    rm /tmp/chrome.zip && \
-    # Install fonts and minimal dependencies
-    microdnf install -y \
+# Install fonts and Chrome runtime dependencies
+RUN microdnf install -y \
     dejavu-sans-mono-fonts \
     dejavu-serif-fonts \
     liberation-mono-fonts \
@@ -67,6 +66,9 @@ RUN microdnf install -y wget unzip && \
     libxkbcommon \
     gtk3 \
     && microdnf clean all
+
+# Copy Chrome from builder
+COPY --from=builder /opt/chrome /opt/chrome
 
 # Configure locale for UTF-8 support
 ENV LANG=en_US.UTF-8 \
