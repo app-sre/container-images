@@ -22,7 +22,7 @@ Chrome for Testing is Google's official browser distribution for automated testi
 
 To update to a new version of grafana-image-renderer:
 
-1. Update `VERSION` in the Dockerfile
+1. Update `GIR_VERSION` in the Dockerfile
 2. Optionally update `CHROME_VERSION` to match upstream requirements (see [Chrome for Testing versions](https://googlechromelabs.github.io/chrome-for-testing/))
 
 ## Usage
