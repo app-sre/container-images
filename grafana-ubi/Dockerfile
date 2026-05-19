@@ -1,4 +1,4 @@
-ARG GF_VERSION="11.6.3"
+ARG GF_VERSION="11.6.11"
 
 FROM registry.access.redhat.com/ubi9-minimal@sha256:92b1d5747a93608b6adb64dfd54515c3c5a360802db4706765ff3d8470df6290 AS downloader
 
@@ -25,7 +25,7 @@ ENV PATH="/usr/share/grafana/bin:$PATH" \
 
 WORKDIR $GF_PATHS_HOME
 
-COPY --from=downloader --chown=1001:0 /tmp/grafana-install/grafana-v${GF_VERSION} /usr/share/grafana/
+COPY --from=downloader --chown=1001:0 /tmp/grafana-install/grafana-${GF_VERSION} /usr/share/grafana/
 
 RUN useradd -u 1001 -g 0 -r -d /usr/share/grafana -s /sbin/nologin grafana && \
     mkdir -p "$GF_PATHS_HOME/.aws" \
