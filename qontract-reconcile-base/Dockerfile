@@ -12,7 +12,7 @@ ENV TF_PROVIDER_CLOUDINIT_VERSIONS="2.3.3"
 ENV TF_VERSION=1.6.6
 ENV HELM_VERSION=3.19.2
 ENV GIT_SECRETS_VERSION=1.3.0
-ENV PROMETHEUS_VERSIONS="2.55.1 3.2.1"
+ENV PROMETHEUS_VERSIONS="2.55.1 3.9.1"
 ENV ALERTMANAGER_VERSION=0.29.0
 
 
@@ -78,7 +78,7 @@ COPY --from=ghcr.io/slok/sloth:v0.12.0@sha256:966590f31d9cb757034d20505579fc170e
 
 FROM registry.access.redhat.com/ubi10/python-314-minimal@sha256:ee3ee7060695da0bc102a0dc523b76ae4332daf5909ef2f01a07d6feccd9bab2 AS prod
 
-LABEL konflux.additional-tags=2.0.0
+LABEL konflux.additional-tags=2.1.0
 
 ENV TF_PLUGIN_LOCAL_DIR=/usr/local/share/terraform/
 ENV TF_PLUGIN_CACHE_DIR=/.terraform.d/plugin-cache/
