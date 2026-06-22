@@ -61,3 +61,7 @@ COPY redis-cli-ext /usr/local/bin/redis-cli-ext
 # Copy telnet wrapper script (uses nc since telnet package is not available in UBI9 repositories)
 COPY telnet /usr/local/bin/telnet
 RUN chmod +x /usr/local/bin/telnet
+
+# SRE tooling scripts
+COPY scripts/platform-secret-checker.sh /usr/local/bin/platform-secret-checker
+RUN chmod +x /usr/local/bin/platform-secret-checker
