@@ -3,7 +3,7 @@ LABEL konflux.additional-tags=1.0.1
 
 WORKDIR /work
 
-ENV OC_VERSIONS="4.10.15 4.12.46 4.16.2"
+ENV OC_VERSIONS="4.16.2"
 
 RUN for version in ${OC_VERSIONS}; do \
     mkdir ${version}; \
