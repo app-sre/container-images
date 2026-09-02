@@ -44,7 +44,7 @@ RUN for version in ${TF_PROVIDER_CLOUDINIT_VERSIONS}; do \
     unzip /tmp/package-cloudinit-${version}.zip -d /tmp/terraform-providers/hashicorp/cloudinit/${version}/linux_amd64/; \
     done
 
-COPY --from=registry.redhat.io/openshift4/ose-cli-rhel9:v4.19.0@sha256:ad40aef1cd5aa293db26b2e19cee939e6265f9e97eb81c0f99d71929f8fd0c36 /usr/bin/oc /usr/bin/kubectl /usr/local/bin/
+COPY --from=registry.redhat.io/openshift4/ose-cli-rhel9:v4.19.0@sha256:464eaca58582fe89cf9367a5ae0387d59a120b4ea03df931656a183be3ebfcab /usr/bin/oc /usr/bin/kubectl /usr/local/bin/
 
 RUN curl -sfL https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip \
     -o terraform.zip && \
