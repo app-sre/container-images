@@ -1,6 +1,6 @@
 ARG RELOADER_VERSION=v1.4.14
 
-FROM registry.access.redhat.com/ubi9/go-toolset:1.25.8@sha256:77bfb0f283eaa3215909342c3dda940605eff5b9f72d6dc18fad1d154d172d55 as builder
+FROM registry.access.redhat.com/ubi9/go-toolset:9.8-1788409979@sha256:5e68f09a652ac6627a83c57655e42e24575efb278b54336039c9308607fc6b21 as builder
 ARG RELOADER_VERSION
 ENV GO111MODULE=on
 ENV GOTOOLCHAIN=go1.26.1
