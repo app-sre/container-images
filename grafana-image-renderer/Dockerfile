@@ -5,6 +5,8 @@
 #
 # Using Chrome for Testing instead of EPEL chromium because EPEL chromium
 # has unmet dependencies (pipewire-libs, bluez-libs) not available in UBI/EPEL.
+#
+# Konflux rebuild trigger (APPSRE-14854/APPSRE-14895): no functional change.
 
 ARG GIR_VERSION="5.8.3"
 ARG CHROME_VERSION="148.0.7778.96"
