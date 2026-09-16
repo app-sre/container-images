@@ -1,3 +1,4 @@
+# Konflux rebuild trigger (APPSRE-14854/APPSRE-14895): no functional change.
 FROM registry.access.redhat.com/ubi9/go-toolset@sha256:14c369670cf3473d8e9b93e42d120c01b79a6f13884c396a1c89b7ca46f859b7 as builder
 ENV COMMIT=8de8628580736b9ac74ad084b1844a75fbef8933
 WORKDIR rds_exporter
