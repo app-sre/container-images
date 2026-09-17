@@ -1,7 +1,6 @@
-# Konflux rebuild trigger (APPSRE-14854/APPSRE-14895): no functional change.
-FROM quay.io/redhat-services-prod/app-sre-tenant/container-images-master/qontract-reconcile-base-master:2.2.0-1@sha256:918bc54441031f48f5b9c0b8f99c3ff3fb260aec1390bf5bbd79dbf020730e39
+FROM quay.io/redhat-services-prod/app-sre-tenant/container-images-master/qontract-reconcile-base-master:2.2.1-1@sha256:80eea44e24eec0e772d16c492e3b8d9ec0030e8271536214921278cf66cfd4ff
 
-LABEL konflux.additional-tags=2.2.0
+LABEL konflux.additional-tags=2.2.1
 WORKDIR /work
 
 RUN mkdir ~/.gnupg && \
