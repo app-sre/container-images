@@ -41,7 +41,7 @@ RUN dnf install -y wget unzip && \
     mv /opt/chrome-headless-shell-linux64 /opt/chrome
 
 # Runtime stage - UBI9 minimal
-FROM registry.access.redhat.com/ubi9-minimal@sha256:92b1d5747a93608b6adb64dfd54515c3c5a360802db4706765ff3d8470df6290
+FROM registry.access.redhat.com/ubi9-minimal@sha256:7b8e25a1b56ca4d00219198f3b5b51a3e1693a5c4f5369c5e190d7d6cb3f980e
 
 ARG GIR_VERSION
 ARG CHROME_VERSION
