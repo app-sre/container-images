@@ -1,7 +1,7 @@
 # Konflux rebuild trigger (APPSRE-14854/APPSRE-14895): no functional change.
 ARG GF_VERSION="11.6.11"
 
-FROM registry.access.redhat.com/ubi9-minimal@sha256:92b1d5747a93608b6adb64dfd54515c3c5a360802db4706765ff3d8470df6290 AS downloader
+FROM registry.access.redhat.com/ubi9-minimal@sha256:7b8e25a1b56ca4d00219198f3b5b51a3e1693a5c4f5369c5e190d7d6cb3f980e AS downloader
 
 ARG GF_VERSION
 
@@ -9,7 +9,7 @@ RUN microdnf install -y tar gzip wget && mkdir /tmp/grafana-install && \
     wget -O /tmp/grafana.tar.gz https://dl.grafana.com/oss/release/grafana-${GF_VERSION}.linux-amd64.tar.gz && \
     tar -zxvf /tmp/grafana.tar.gz --directory=/tmp/grafana-install
 
-FROM registry.access.redhat.com/ubi9-minimal@sha256:92b1d5747a93608b6adb64dfd54515c3c5a360802db4706765ff3d8470df6290 AS base
+FROM registry.access.redhat.com/ubi9-minimal@sha256:7b8e25a1b56ca4d00219198f3b5b51a3e1693a5c4f5369c5e190d7d6cb3f980e AS base
 
 ARG GF_VERSION
 LABEL konflux.additional-tags=${GF_VERSION}
