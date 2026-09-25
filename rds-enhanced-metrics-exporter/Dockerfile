@@ -1,5 +1,5 @@
 # Konflux rebuild trigger (APPSRE-14854/APPSRE-14895): no functional change.
-FROM registry.access.redhat.com/ubi9/go-toolset@sha256:14c369670cf3473d8e9b93e42d120c01b79a6f13884c396a1c89b7ca46f859b7 as builder
+FROM registry.access.redhat.com/ubi9/go-toolset@sha256:0a4666f7a4eb0644c97a73cba198eb268691b270d97831822689e7a2088f87be as builder
 ENV COMMIT=8de8628580736b9ac74ad084b1844a75fbef8933
 WORKDIR rds_exporter
 RUN git init && \
@@ -8,6 +8,6 @@ RUN git init && \
     git checkout $COMMIT
 RUN make release
 
-FROM registry.access.redhat.com/ubi9-minimal@sha256:2f06ae0e6d3d9c4f610d32c480338eef474867f435d8d28625f2985e8acde6e8
+FROM registry.access.redhat.com/ubi9-minimal@sha256:8ebe2ad8fdf3cab3e5a53c1edc69194c98209cfadab24b884f4ad9ebcf7bbbfc
 COPY --from=builder /opt/app-root/src/rds_exporter/rds_exporter .
 ENTRYPOINT ["/rds_exporter", "--config.file=/rds-exporter-config/config.yml"]

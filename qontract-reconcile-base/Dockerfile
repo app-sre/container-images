@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi10/ubi@sha256:0ad01c46c6a173a5d9dd901afc695431448a8b0e02dc898d07836fe3c3977b92 AS downloader
+FROM registry.access.redhat.com/ubi10/ubi@sha256:223f8b83bcaa1159416724627ff2fadbfd2444653756b0c00d9dae1eacccbfbc AS downloader
 
 RUN dnf -y install unzip glibc-langpack-en
 
@@ -44,7 +44,7 @@ RUN for version in ${TF_PROVIDER_CLOUDINIT_VERSIONS}; do \
     unzip /tmp/package-cloudinit-${version}.zip -d /tmp/terraform-providers/hashicorp/cloudinit/${version}/linux_amd64/; \
     done
 
-COPY --from=registry.redhat.io/openshift4/ose-cli-rhel9:v4.19.0@sha256:a2313a5e8cc77dcd15189e21c41ae0bfbac11f578137c972659df545bf9a2150 /usr/bin/oc /usr/bin/kubectl /usr/local/bin/
+COPY --from=registry.redhat.io/openshift4/ose-cli-rhel9:v4.19.0@sha256:7e5c2150932f5efa49a83f44dffa451eefabfeeff2203628857740f04aa9b34d /usr/bin/oc /usr/bin/kubectl /usr/local/bin/
 
 RUN curl -sfL https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip \
     -o terraform.zip && \
@@ -76,7 +76,7 @@ RUN curl -sfL https://github.com/prometheus/alertmanager/releases/download/v${AL
 
 COPY --from=ghcr.io/slok/sloth:v0.12.0@sha256:966590f31d9cb757034d20505579fc170ef562227faaf6e8f36609e64259f121 /usr/local/bin/sloth /usr/local/bin/sloth
 
-FROM registry.access.redhat.com/ubi10/python-314-minimal@sha256:ee3ee7060695da0bc102a0dc523b76ae4332daf5909ef2f01a07d6feccd9bab2 AS prod
+FROM registry.access.redhat.com/ubi10/python-314-minimal@sha256:6ea702d478f66cf78fb694d2fc2634f353c3f49c54fbbe58ba39288a59c83aa7 AS prod
 
 LABEL konflux.additional-tags=2.2.1
 
