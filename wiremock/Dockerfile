@@ -1,5 +1,5 @@
 # Konflux rebuild trigger (APPSRE-14854/APPSRE-14895): no functional change.
-FROM registry.access.redhat.com/ubi9/openjdk-21-runtime:1.23@sha256:17009c3d3b149bb98097b65fdf43c8b7c37293ae280ee503fbae72103e9ac434
+FROM registry.access.redhat.com/ubi9/openjdk-21-runtime:1.24-3.1790007358@sha256:908540a90db3dea9dcc8b80de84c9d44ced2dd328d3ed36930b0b04ad8a0f4e8
 
 COPY LICENSE /licenses/LICENSE
 

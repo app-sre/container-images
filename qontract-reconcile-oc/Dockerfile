@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9/ubi:9.3@sha256:66233eebd72bb5baa25190d4f55e1dc3fff3a9b77186c1f91a0abdb274452072
+FROM registry.access.redhat.com/ubi9/ubi:9.8-1790067847@sha256:a4b9ec09b1e790a53ef25b7777c539976abe519248264298e5194dcbceac8c31
 LABEL konflux.additional-tags=1.0.2
 
 WORKDIR /work
