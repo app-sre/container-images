@@ -8,7 +8,7 @@ This build repackages the upstream sidecar application onto a hardened, distrole
 
 At **build time** the Dockerfile:
 
-1. Copies `/app/*.py` from `quay.io/kiwigrid/k8s-sidecar` (pinned by `SIDECAR_TAG`).
+1. **`COPY --from=quay.io/kiwigrid/k8s-sidecar:…`** the four application modules into the builder stage (no `FROM` that Quay image — Konflux base-image policy rejects that; same approach as `prometheus-cloudwatch-exporter`).
 2. Installs Python dependencies into a new venv on `hi/python` **`-builder`** (glibc wheels; the upstream Alpine venv is not reused).
 3. Produces a final image on **`hi/python`** (runtime variant only).
 
@@ -20,7 +20,7 @@ Sidecar behavior, environment variables, and probes are documented in the [upstr
 
 | Argument       | Default   | Meaning                                      |
 |----------------|-----------|----------------------------------------------|
-| `SIDECAR_TAG`  | `1.30.11` | Tag of `quay.io/kiwigrid/k8s-sidecar` to copy `.py` from |
+| `SIDECAR_TAG`  | `1.30.11` | Konflux label `konflux.additional-tags`; must match the tag in the `COPY --from=quay.io/kiwigrid/k8s-sidecar:…` line in the Dockerfile |
 | `PYTHON_TAG`   | `3.14`    | Hummingbird Python stream (`hi/python` and `hi/python-*-builder`) |
 
 `LABEL konflux.additional-tags=${SIDECAR_TAG}` tags Konflux builds with the upstream sidecar version.

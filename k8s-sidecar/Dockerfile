@@ -1,9 +1,15 @@
 ARG SIDECAR_TAG=1.30.11
 ARG PYTHON_TAG=3.14
 FROM registry.access.redhat.com/hi/python:${PYTHON_TAG}-builder AS builder
+ARG SIDECAR_TAG
 USER root
 WORKDIR /app
-COPY --from=quay.io/kiwigrid/k8s-sidecar:${SIDECAR_TAG} /app/*.py /app/
+COPY --from=quay.io/kiwigrid/k8s-sidecar:1.30.11 \
+    /app/helpers.py \
+    /app/logger.py \
+    /app/resources.py \
+    /app/sidecar.py \
+    /app/
 RUN python -m venv .venv \
     && .venv/bin/pip install --no-cache-dir \
          kubernetes==32.0.1 \
