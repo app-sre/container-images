@@ -1,0 +1,24 @@
+ARG SIDECAR_TAG=1.30.11
+ARG PYTHON_TAG=3.14
+FROM quay.io/kiwigrid/k8s-sidecar:${SIDECAR_TAG} AS upstream
+FROM registry.access.redhat.com/hi/python:${PYTHON_TAG}-builder AS builder
+USER root
+WORKDIR /app
+COPY --from=upstream /app/*.py /app/
+RUN python -m venv .venv \
+    && .venv/bin/pip install --no-cache-dir \
+         kubernetes==32.0.1 \
+         requests==2.33.1 \
+         python-json-logger==4.1.0 \
+         logfmter==0.0.12 \
+         pyasn1==0.6.4
+FROM registry.access.redhat.com/hi/python:${PYTHON_TAG}
+ARG SIDECAR_TAG
+LABEL org.opencontainers.image.source=https://github.com/kiwigrid/k8s-sidecar
+LABEL konflux.additional-tags=${SIDECAR_TAG}
+ENV PYTHONUNBUFFERED=1
+WORKDIR /app
+COPY --from=builder /app /app
+ENV PATH="/app/.venv/bin:$PATH"
+USER 65534:65534
+ENTRYPOINT ["python", "-u", "/app/sidecar.py"]
