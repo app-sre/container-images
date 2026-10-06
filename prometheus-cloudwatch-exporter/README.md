@@ -39,24 +39,20 @@ make test
 Follow these steps to update the exporter version:
 
 1. Edit `Dockerfile` and change the image tags.
-  
   For the Red Hat base image:
-  * Replace the `FIPS_IMAGE_TAG` with the version you want from [RH Hardened OpenJDK FIPS releases](https://images.redhat.com/?fipsOnly=true&name=openjdk).
+  - Replace the `FIPS_IMAGE_TAG` with the version you want from [RH Hardened OpenJDK FIPS releases](https://images.redhat.com/?fipsOnly=true&name=openjdk).
   ```dockerfile
-  FROM registry.access.redhat.com/hi/openjdk:<FIPS_IMAGE_TAG> AS runner
+  FROM registry.access.redhat.com/hi/openjdk:<FIPS_IMAGE_TAG>
   ```
-  
   For the upstream exporter:
-  * Replace `IMAGE_TAG` with the version you want from [cloudwatch_exporter releases](https://github.com/prometheus/cloudwatch_exporter/releases).
+  - Replace `IMAGE_TAG` with the version you want from [cloudwatch_exporter releases](https://github.com/prometheus/cloudwatch_exporter/releases).
   ```dockerfile
   COPY --from=quay.io/prometheus/cloudwatch-exporter:<IMAGE_TAG>
   ```
-
 2. Rebuild the image:
   ```bash
    make build
   ```
-
 3. Test the new build:
   ```bash
    make test
