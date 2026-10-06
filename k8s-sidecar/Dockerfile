@@ -1,6 +1,6 @@
 ARG SIDECAR_TAG=1.30.11
 ARG PYTHON_TAG=3.14
-FROM registry.access.redhat.com/hi/python:${PYTHON_TAG}-builder AS builder
+FROM registry.access.redhat.com/hi/python:${PYTHON_TAG}-fips-builder AS builder
 ARG SIDECAR_TAG
 USER root
 WORKDIR /app
@@ -17,7 +17,7 @@ RUN python -m venv .venv \
          python-json-logger==4.1.0 \
          logfmter==0.0.12 \
          pyasn1==0.6.4
-FROM registry.access.redhat.com/hi/python:${PYTHON_TAG}
+FROM registry.access.redhat.com/hi/python:${PYTHON_TAG}-fips
 ARG SIDECAR_TAG
 LABEL org.opencontainers.image.source=https://github.com/kiwigrid/k8s-sidecar
 LABEL konflux.additional-tags=${SIDECAR_TAG}
