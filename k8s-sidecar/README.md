@@ -2,7 +2,7 @@
 
 Compliance replacement for [quay.io/kiwigrid/k8s-sidecar](https://quay.io/repository/kiwigrid/k8s-sidecar). The runtime image uses the [Red Hat Hummingbird Python FIPS](https://hummingbird-project.io/docs/using/overview/#fips-variants-latest-fips-latest-fips-builder) hardened image (`registry.access.redhat.com/hi/python`) instead of Alpine.
 
-FIPS-validated cryptography applies when the container runs on a host in FIPS mode, per Hummingbird documentation.
+Per [Hummingbird FIPS validation scope](https://hummingbird-project.io/docs/contributing/fips-variant-guide/#fips-validation-scope), the FIPS 140-3 modules in this image are validated only when the container runs on **RHEL installed in FIPS mode**. Running it on Fedora, on RHEL that is not in FIPS mode, or on other Linux distributions is **outside** that validated configuration. (Python uses the OpenSSL FIPS stack, which still restricts algorithms inside the container on non-validated hosts as a best-effort; that behavior is not the CMVP-validated configuration.)
 
 ## Purpose
 
