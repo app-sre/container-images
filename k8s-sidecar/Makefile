@@ -4,8 +4,10 @@ IMAGE_NAME := k8s-sidecar-fips
 IMAGE_TAG := testing
 IMAGE := localhost/$(IMAGE_NAME):$(IMAGE_TAG)
 
+CONTAINER_CMD ?= $(shell docker info >/dev/null 2>&1 && echo docker || echo podman)
+
 help:
-	@echo "Container runtime: $(CONTAINER_CMD) (override with CONTAINER_CMD=...)"
+	@echo "Container runtime: $(CONTAINER_CMD) (set CONTAINER_CMD=... to override)"
 	@echo "Usage:"
 	@echo "  make build    Build container image"
 	@echo "  make test     Run container smoke test"
