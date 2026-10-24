@@ -74,7 +74,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN curl -sfL https://github.com/prometheus/alertmanager/releases/download/v${ALERTMANAGER_VERSION}/alertmanager-${ALERTMANAGER_VERSION}.linux-amd64.tar.gz \
     | tar -zxf - -C /usr/local/bin --strip-components=1 alertmanager-${ALERTMANAGER_VERSION}.linux-amd64/amtool
 
-COPY --from=ghcr.io/slok/sloth:v0.12.0@sha256:966590f31d9cb757034d20505579fc170ef562227faaf6e8f36609e64259f121 /usr/local/bin/sloth /usr/local/bin/sloth
+COPY --from=ghcr.io/slok/sloth:v0.16.0@sha256:f0f0075b0d45c1cf684e92947508cc1d5bf573925f785f803a439b2306c8b9a5 /usr/local/bin/sloth /usr/local/bin/sloth
 
 FROM registry.access.redhat.com/ubi10/python-314-minimal@sha256:3754d6dacac3177e62637420cadf7dcf438e390f664c527b0457a79653a47488 AS prod
 
