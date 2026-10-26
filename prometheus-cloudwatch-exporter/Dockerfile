@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/hi/openjdk:25.0.4-fips@sha256:30e4778d6192f72a8fa6cdc2828dd00d063263af78575ead2a31e6e72c80d137
+FROM registry.access.redhat.com/hi/openjdk:25.0.4-fips@sha256:aa44cf0789dec91e97156d829cae8aa1a94f939b1167447263a576dd283ee9d1
 LABEL maintainer="The Prometheus Authors <prometheus-developers@googlegroups.com>"
 EXPOSE 9106
 
