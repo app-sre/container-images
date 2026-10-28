@@ -26,6 +26,10 @@ RUN git clone https://github.com/kiwigrid/k8s-sidecar.git /tmp/k8s-sidecar \
     && test "$(git rev-parse HEAD)" = "${SIDECAR_COMMIT_SHA}" \
     && cp -a src/. /app/
 
+COPY kube_client_config.py /app/kube_client_config.py
+COPY patch_upstream.py /tmp/patch_upstream.py
+RUN python /tmp/patch_upstream.py
+
 COPY check_cryptography_openssl.py /tmp/check_cryptography_openssl.py
 
 RUN python -m venv .venv \
