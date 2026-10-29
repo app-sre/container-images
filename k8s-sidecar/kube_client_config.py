@@ -14,9 +14,6 @@ from helpers import (
     REQ_RETRY_TOTAL,
 )
 
-SKIP_TLS_VERIFY = "SKIP_TLS_VERIFY"
-
-
 def ensure_kubernetes_configuration(logger=None):
     """
     Load in-cluster (or kubeconfig file) settings into the default client config.
@@ -39,19 +36,13 @@ def ensure_kubernetes_configuration(logger=None):
                 f"SSL certificate verification failed when initializing Kubernetes client: {e}"
             )
             logger.error(
-                "Check the service account CA or set SKIP_TLS_VERIFY=true (insecure)."
+                "Check the service account CA at /var/run/secrets/kubernetes.io/serviceaccount/ca.crt."
             )
         raise
     except Exception as e:
         if logger:
             logger.error(f"Unexpected error during Kubernetes client initialization: {e}")
         raise
-
-    if os.getenv(SKIP_TLS_VERIFY) == "true":
-        configuration = client.Configuration.get_default_copy()
-        configuration.verify_ssl = False
-        configuration.debug = False
-        client.Configuration.set_default(configuration)
 
     configuration = client.Configuration.get_default_copy()
     configuration.retries = Retry(
