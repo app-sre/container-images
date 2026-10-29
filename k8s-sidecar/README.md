@@ -11,10 +11,13 @@ This build repackages the upstream sidecar application onto a hardened, distrole
 At **build time** the Dockerfile:
 
 1. **Clones [kiwigrid/k8s-sidecar](https://github.com/kiwigrid/k8s-sidecar)** at **`SIDECAR_COMMIT_SHA`** (pinned to the commit for release **`SIDECAR_TAG`**) and copies `src/` into the builder stage — no Quay image in the build graph.
-2. Installs Python dependencies from upstream **`src/requirements.txt`** into a new venv on **`hi/python:<version>-fips-builder`** (glibc wheels; the upstream Alpine venv is not reused).
+2. Applies a small patch ([`kube_client_config.py`](kube_client_config.py), [`patch_upstream.py`](patch_upstream.py)) so watch **worker processes** reload in-cluster Kubernetes client configuration. On Python 3.14, multiprocessing may use `spawn`, where workers do not inherit the parent's API `host` and the client defaults to `http://localhost:80`.
+3. Installs Python dependencies from upstream **`src/requirements.txt`** into a new venv on **`hi/python:<version>-fips-builder`** (glibc wheels; the upstream Alpine venv is not reused).
    - **`cryptography`** is a transitive dependency (`kubernetes` → `google-auth` → `cryptography`). The default manylinux wheel bundles its own statically-linked OpenSSL, which would bypass Hummingbird's FIPS-validated OpenSSL even though the sidecar never calls `cryptography` directly — Hummingbird's FIPS policy excludes unvalidated crypto libraries regardless of whether they're exercised at runtime. The Dockerfile installs build tooling (`gcc`, `rust`, `cargo`, `openssl-devel`, `libffi-devel`, `pkg-config`) and runs `pip install --no-binary cryptography` so it links the image's system OpenSSL instead. [`check_cryptography_openssl.py`](check_cryptography_openssl.py) runs during the build (and via `make test`) to confirm `cryptography`'s reported OpenSSL version matches Python's own `ssl` module.
    - References: [kubernetes 32.0.1 metadata](https://pypi.org/pypi/kubernetes/32.0.1/json), [google-auth 2.60.0 metadata](https://pypi.org/pypi/google-auth/2.60.0/json), [cryptography static wheels](https://cryptography.io/en/latest/installation/#static-wheels), [Hummingbird FIPS guide](https://hummingbird-project.io/docs/contributing/fips-variant-guide/).
-3. Produces a final image on **`hi/python:<version>-fips`** (distroless FIPS runtime).
+4. Produces a final image on **`hi/python:<version>-fips`** (distroless FIPS runtime).
+
+Grafana (and similar) deployments should use **python-based exec probes** on `dashboard-discovery`; the distroless runtime has no `/bin/sh`. Do not use upstream **`METHOD=LIST`** as a workaround — it syncs once and exits, which restarts the container in a loop.
 
 Permitted **bases** for Konflux policy are the `registry.access.redhat.com/hi/python` stages only.
 
