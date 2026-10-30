@@ -1,7 +1,7 @@
 # Konflux rebuild trigger (APPSRE-14854/APPSRE-14895): no functional change.
 ARG RELOADER_VERSION=v1.4.14
 
-FROM registry.access.redhat.com/ubi9/go-toolset:9.8-1792010711@sha256:60fd6fb2998c40ad0d6561c34e83588b986a0cf7771f64e5e5c295ba87101f9b as builder
+FROM registry.access.redhat.com/ubi9/go-toolset:9.8-1793294290@sha256:cab9089469c52029e4d8a4e9f717e87c51ab22eed448ebcada101b811f97dfe7 as builder
 ARG RELOADER_VERSION
 ENV GO111MODULE=on
 ENV GOTOOLCHAIN=go1.26.1
