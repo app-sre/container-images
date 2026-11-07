@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9/openjdk-21@sha256:bd995811a45eb587f97a105796f8f43df466a4269411a2a1642f0f9799f885db
+FROM registry.access.redhat.com/ubi9/openjdk-21@sha256:c8fcb7571677a9f6f1f2f3325c9765103ecc2834ff13ce20eb5ee6d1088f7e12
 # Konflux rebuild trigger (APPSRE-14854/APPSRE-14895): no functional change.
 ARG KAFKA_VERSION
 ARG KAFKA_VERSION_PATCH
