@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     dynatrace = {
-      version = "1.104.1"
+      version = "1.108.0"
       source  = "dynatrace-oss/dynatrace"
     }
 
