@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9-minimal@sha256:2d4c4551af6831dcd26bbf86108c4385de5183ec8fe6b5868f6f9640fe47f4ed
+FROM registry.access.redhat.com/ubi9-minimal@sha256:4b79c93106c14ad1c234907f83441ff0e4f8d24e78426a36e159098e9f7e6fa5
 
 # https://konflux.pages.redhat.com/docs/users/how-tos/configuring/custom-tags.html
 # Set your image version here
