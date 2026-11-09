@@ -12,7 +12,7 @@ ARG GIR_VERSION="5.8.3"
 ARG CHROME_VERSION="148.0.7778.96"
 
 # Build stage - compile Go binary from source and download Chrome
-FROM registry.access.redhat.com/ubi9/go-toolset:9.8-1792010711@sha256:60fd6fb2998c40ad0d6561c34e83588b986a0cf7771f64e5e5c295ba87101f9b AS builder
+FROM registry.access.redhat.com/ubi9/go-toolset:9.8-1793736700@sha256:c2bd0309bf78ae317024fdfc5602a31704e0dba9572f6d4b0bd4b681033dc965 AS builder
 
 ARG GIR_VERSION
 ARG CHROME_VERSION
