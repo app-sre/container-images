@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9/ubi:9.8-1794186345@sha256:87f66688da4e206d5a1877088626c542288a5ccd97898cf363b588d57817e6be
+FROM registry.access.redhat.com/ubi9/ubi:9.9-1795197514@sha256:6636b79fba9e5044360366f189333c30b5ce528efd92c40c68b074592b971fcd
 
 LABEL konflux.additional-tags=0.4.2
 
