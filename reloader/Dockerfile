@@ -17,7 +17,7 @@ RUN CGO_ENABLED=0 \
         -X github.com/stakater/Reloader/pkg/common.Edition=oss" \
       -installsuffix 'static' -mod=mod -a -o manager ./
 
-FROM registry.access.redhat.com/ubi9-minimal@sha256:f26ef64172ea61f5ac5ba4be8c5c738bf8760b22b3e5148ce7b40f7308ab32db
+FROM registry.access.redhat.com/ubi9-minimal@sha256:08d4c70f1baf6537a0728656cf7942d561e74a35916509d205b6519861266352
 ARG RELOADER_VERSION
 LABEL konflux.additional-tags=${RELOADER_VERSION}
 WORKDIR /
